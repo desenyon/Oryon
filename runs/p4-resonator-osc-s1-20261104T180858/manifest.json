@@ -1,0 +1,54 @@
+{
+  "run_id": "p4-resonator-osc-s1-20261104T180858",
+  "hypothesis": "H001",
+  "plan_rev": "R3",
+  "purpose": "dense pilot training: resonator / osc",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=osc seed=1",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T18:08:58Z",
+  "status": "running",
+  "git_commit": "5a9a451031d6d2349fa8eb01988447a7bb6347a5",
+  "git_dirty": false,
+  "source_patch_sha256": null,
+  "untracked_src_sha256": {},
+  "config": {
+    "task": "resonator",
+    "model": "osc",
+    "seed": 1,
+    "n_train": 4000,
+    "n_val": 500,
+    "steps": 1500,
+    "batch_size": 32,
+    "lr": 0.003,
+    "weight_decay": 0.0,
+    "clip": 1.0,
+    "eval_every": 250,
+    "max_minutes": 25,
+    "threads": 4,
+    "model_cfg": {
+      "groups": 8,
+      "modes": 32,
+      "d_model": 256,
+      "d_hidden": 64,
+      "omega_max": 3.0,
+      "gamma_init": [
+        0.005,
+        0.5
+      ]
+    },
+    "gru_hidden": 225
+  },
+  "config_sha256": "b8564282f071455aed71ba9836be4f12b2f90775ef86de084e0e3d68665c90b9",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 81327
+}
