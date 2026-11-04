@@ -122,6 +122,23 @@ class Run:
         self._write_manifest()
         self.log_path = d / "log.txt"
 
+    @classmethod
+    def reopen(cls, run_dir) -> "Run":
+        """Resume an interrupted run in its own directory (appends to log; keeps manifest history)."""
+        self = cls.__new__(cls)
+        self.dir = Path(run_dir)
+        self.run_id = self.dir.name
+        self.manifest = json.loads((self.dir / "manifest.json").read_text())
+        self.cfg = self.manifest["config"]
+        self.device = self.manifest["env"]["device"]
+        prev = float(self.manifest.get("wall_s") or 0.0)
+        self.t0 = time.time() - prev
+        self.manifest.setdefault("resumes", []).append({"utc": _now(), "pid": os.getpid(), "git_commit": _git("rev-parse", "HEAD").strip()})
+        self.manifest["status"] = "running"
+        self.log_path = self.dir / "log.txt"
+        self._write_manifest()
+        return self
+
     def _write_manifest(self) -> None:
         tmp = self.dir / "manifest.json.tmp"
         tmp.write_text(json.dumps(self.manifest, indent=2, default=str))

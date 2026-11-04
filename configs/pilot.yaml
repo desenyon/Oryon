@@ -1,0 +1,22 @@
+# P4 dense pilot (ordinary task loss). Override per run: --set task=recall model=zerofreq seed=1
+task: resonator          # resonator | recall
+model: osc               # osc | zerofreq | gru
+seed: 0
+n_train: 4000
+n_val: 500
+steps: 1500
+batch_size: 32
+lr: 0.003
+weight_decay: 0.0
+clip: 1.0
+eval_every: 250
+max_minutes: 25
+threads: 4
+model_cfg:               # pilot shape fixed in D005 (G=8, m=32, d=256, hidden=64)
+  groups: 8
+  modes: 32
+  d_model: 256
+  d_hidden: 64
+  omega_max: 3.0
+  gamma_init: [0.005, 0.5]
+gru_hidden: 225          # ~ parameter-matched to osc (~155K vs ~153K; exact counts in manifests)
