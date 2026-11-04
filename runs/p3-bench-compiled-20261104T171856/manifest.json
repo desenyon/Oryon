@@ -1,0 +1,82 @@
+{
+  "run_id": "p3-bench-compiled-20261104T171856",
+  "hypothesis": "H001",
+  "plan_rev": "R1",
+  "purpose": "profile write fraction f, ceiling, controller overhead; engine=compiled (untrained weights)",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/benchmark.py --config configs/benchmark_compiled.yaml",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T17:18:56Z",
+  "status": "passed",
+  "git_commit": "809d60f809530a4a65a7c68af6b29798d418f8a7",
+  "git_dirty": false,
+  "source_patch_sha256": null,
+  "untracked_src_sha256": {},
+  "config": {
+    "engine": "compiled",
+    "seed": 7,
+    "d_in": 4,
+    "d_out": 4,
+    "steps": 400,
+    "reps": 30,
+    "active_frac": 0.2,
+    "shapes": [
+      {
+        "groups": 8,
+        "modes": 8,
+        "d_model": 64,
+        "d_hidden": 64
+      },
+      {
+        "groups": 8,
+        "modes": 16,
+        "d_model": 128,
+        "d_hidden": 64
+      },
+      {
+        "groups": 8,
+        "modes": 32,
+        "d_model": 256,
+        "d_hidden": 64
+      },
+      {
+        "groups": 8,
+        "modes": 64,
+        "d_model": 256,
+        "d_hidden": 128
+      },
+      {
+        "groups": 16,
+        "modes": 32,
+        "d_model": 512,
+        "d_hidden": 128
+      },
+      {
+        "groups": 4,
+        "modes": 64,
+        "d_model": 512,
+        "d_hidden": 128
+      }
+    ]
+  },
+  "config_sha256": "03950c742f6065d7db40c5da250a573cb4e977bbc5539edb548732a83c91d823",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 1,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 78597,
+  "end_utc": "2026-11-04T17:19:09Z",
+  "wall_s": 13.56,
+  "device_hours": 0.0038,
+  "artifacts_sha256": {
+    "log.txt": "ca5b8e548caf374d2c2c03821ef979df6cbda9cd9cd13456db8a0fa7316e0291",
+    "metrics.json": "9748a130ca1857d1159d4744152b3adfa7ee04f9ac32ca30defd8629bf4a0fbd"
+  },
+  "key_result": "max cert-all-omit speedup 9.32x at d_model=512 modes=32 (f=0.89); min cert-all-write 0.98x"
+}

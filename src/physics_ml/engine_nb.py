@@ -3,8 +3,9 @@
 Same semantics as engine.StreamEngine, but the complete step (encoder, gates, coefficients,
 bounds, ledger, stable selection, oscillator evolution, genuinely selected projections, readout)
 is one compiled loop, so timing reflects arithmetic and memory rather than interpreter overhead.
-Kept groups and the dense path use the same matvec kernel. Policies:
-0 dense | 1 nowrite (ceiling only) | 2 certified | 3 threshold | 4 delta | 5 oracle (diagnostic).
+Kept groups and the dense path use the same Accelerate sgemv kernel (per-group calls). Policies:
+0 dense | 1 nowrite (ceiling only) | 2 certified | 3 threshold | 4 delta | 5 oracle (diagnostic) |
+6 dense_fused (one sgemv over all groups: the fastest dense reference, used as speedup denominator).
 """
 from __future__ import annotations
 
@@ -15,20 +16,29 @@ import numpy as np
 
 from .model import OscillatorSSM
 
-POLICIES = {"dense": 0, "nowrite": 1, "certified": 2, "threshold": 3, "delta": 4, "oracle": 5}
+POLICIES = {"dense": 0, "nowrite": 1, "certified": 2, "threshold": 3, "delta": 4, "oracle": 5, "dense_fused": 6}
 
 
-@nb.njit(cache=True, inline="always")
+import ctypes  # noqa: E402
+
+# Accelerate cblas_sgemv (single-threaded via VECLIB_MAXIMUM_THREADS=1 in the benchmark), called
+# directly from compiled code so dense and selective projections use the same optimized kernel.
+_ACC = ctypes.CDLL("/System/Library/Frameworks/Accelerate.framework/Accelerate")
+_sgemv = _ACC.cblas_sgemv
+_sgemv.restype = None
+_sgemv.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_float, ctypes.c_void_p, ctypes.c_int,
+                   ctypes.c_void_p, ctypes.c_int, ctypes.c_float, ctypes.c_void_p, ctypes.c_int]
+
+
+@nb.njit(inline="always")
 def _mv(W, r0, r1, u, out):
-    d = u.shape[0]
-    for r in range(r0, r1):
-        s = np.float32(0.0)
-        for k in range(d):
-            s += W[r, k] * u[k]
-        out[r - r0] = s
+    """out[:r1-r0] = W[r0:r1] @ u (row-major float32, contiguous)."""
+    n = W.shape[1]
+    _sgemv(101, 111, r1 - r0, n, np.float32(1.0), W.ctypes.data + r0 * n * 4, n, u.ctypes.data, 1,
+           np.float32(0.0), out.ctypes.data, 1)
 
 
-@nb.njit(cache=True)
+@nb.njit
 def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamma, omega, gmin, wbar, c,
          G, m, policy, epsilon, tau, y, bounds, writes):
     T, d_in = x.shape
@@ -84,6 +94,12 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
                 _mv(Wflat, i * M2, (i + 1) * M2, u, buf)
                 for k in range(M2):
                     h[i * M2 + k] += buf[k] * g[i]
+            nw = G
+        elif policy == 6:
+            _mv(Wflat, 0, G * M2, u, full)
+            for i in range(G):
+                for k in range(M2):
+                    h[i * M2 + k] += full[i * M2 + k] * g[i]
             nw = G
         elif policy == 2 or policy == 5:
             if policy == 5:

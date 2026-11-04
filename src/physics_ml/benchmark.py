@@ -76,7 +76,8 @@ def main() -> None:
         data = [bursty_inputs(rng, cfg["steps"], cfg["d_in"], cfg["active_frac"]) for _ in range(4)]
         xs, dts = [d[0] for d in data], [d[1] for d in data]
         methods = {
-            "dense": {"policy": "dense"},
+            "dense": {"policy": "dense_fused"} if cfg.get("engine") == "compiled" else {"policy": "dense"},
+            "dense_pergroup": {"policy": "dense"},
             "nowrite": {"policy": "nowrite"},
             "cert_all_write": {"policy": "certified", "epsilon": 0.0},
             "cert_all_omit": {"policy": "certified", "epsilon": 1e30},

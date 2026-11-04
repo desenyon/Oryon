@@ -1,5 +1,5 @@
 # P3 shape profile (untrained weights; timing depends only on shapes and policy branch).
-# Regime: batch-one streaming, float32, 1 BLAS thread, numba CompiledEngine.
+# Regime: batch-one streaming, float32, 1 BLAS thread, numba CompiledEngine + Accelerate sgemv; denominator = fused dense.
 engine: compiled
 seed: 7
 d_in: 4
