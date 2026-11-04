@@ -6,7 +6,7 @@
   "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=osc seed=0",
   "cwd": "/Users/desenyon/Developer/Oryon",
   "start_utc": "2026-11-04T17:26:56Z",
-  "status": "running",
+  "status": "passed",
   "git_commit": "19344ce2a5c80ae79bc0fa5e8edeb711b54c090f",
   "git_dirty": true,
   "source_patch_sha256": "b75e183a63fd9544bec889353990c3a3127a4dbea820b8928e3b2c391426c0df",
@@ -50,5 +50,16 @@
     "device": "cpu",
     "mps_available": true
   },
-  "pid": 79250
+  "pid": 79250,
+  "end_utc": "2026-11-04T17:34:49Z",
+  "wall_s": 472.65,
+  "device_hours": 0.1313,
+  "artifacts_sha256": {
+    "best.pt": "b354ea4a04b5506b3a6910bccb1ca3a5237ec99dabb923ff00314566e5dfce4c",
+    "last.pt": "29be1b60a8286ebc2bbb55bff794e863682f21b0cb7035f302561afc753a7646",
+    "log.txt": "fae6847976c5cd00dcb525635b753f990450362ba16de27ee63005a7e395e45c",
+    "metrics.json": "9db9b108c52b21a29e597b38cc1c2c4bb4022733b55211e79ea3e22667ce3242",
+    "source.patch": "b75e183a63fd9544bec889353990c3a3127a4dbea820b8928e3b2c391426c0df"
+  },
+  "key_result": "resonator/osc/s0: best val nrmse 0.0054 @ 1500; params 152779"
 }

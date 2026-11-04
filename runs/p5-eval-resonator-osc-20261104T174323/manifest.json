@@ -1,0 +1,108 @@
+{
+  "run_id": "p5-eval-resonator-osc-20261104T174323",
+  "hypothesis": "H001",
+  "plan_rev": "R3",
+  "purpose": "policy sweep on validation for runs/p4-resonator-osc-s0-20261104T172656",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval.yaml --set model_run=runs/p4-resonator-osc-s0-20261104T172656 time_ops=false threads=2",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T17:43:23Z",
+  "status": "passed",
+  "git_commit": "a3ee9568f1a6578f3fa393532d7e52df05493373",
+  "git_dirty": true,
+  "source_patch_sha256": "141dd3accc3204a579c386b26a49979180ed93d76c65e5e3dae5230fe1a23b69",
+  "untracked_src_sha256": {},
+  "config": {
+    "hypothesis": "H001",
+    "model_run": "runs/p4-resonator-osc-s0-20261104T172656",
+    "n_val": 200,
+    "seed": 11,
+    "threads": 2,
+    "tol_rel_rmse": 0.02,
+    "tol_acc_pp": 0.5,
+    "policies": [
+      {
+        "name": "certified",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0
+        ]
+      },
+      {
+        "name": "cdelta",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0
+        ]
+      },
+      {
+        "name": "oracle",
+        "grid": [
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0
+        ]
+      },
+      {
+        "name": "threshold",
+        "grid": [
+          0.003,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0
+        ]
+      },
+      {
+        "name": "delta",
+        "grid": [
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0
+        ]
+      }
+    ],
+    "time_ops": false,
+    "n_time_seqs": 20,
+    "timing_reps": 40,
+    "model_manifest_sha": "eb938374fc84b14ca226c7e19fa0620fc3f0153b6975d7dc5613a8fcf3540fc5"
+  },
+  "config_sha256": "3b39201a36f02600dec055df97c1dbf6323407687cd0074dac896c4016a43eac",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 2,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 80397,
+  "end_utc": "2026-11-04T17:43:37Z",
+  "wall_s": 14.7,
+  "device_hours": 0.0041,
+  "artifacts_sha256": {
+    "log.txt": "6dc6b46e1774f77d55d2d57639adf1a3d520918b3970c84629dd97875efd6dec",
+    "metrics.json": "f45b7c12f08eb7d80f48d1473b24bb4153456cfcbb1f04916c5ee540ceff73bf",
+    "source.patch": "141dd3accc3204a579c386b26a49979180ed93d76c65e5e3dae5230fe1a23b69"
+  },
+  "key_result": "resonator/osc: dense {'nrmse': 0.00548946438357234}; op write_frac certified=1.000, cdelta=0.165, oracle=1.000, threshold=1.000, delta=0.164; speedups {}"
+}

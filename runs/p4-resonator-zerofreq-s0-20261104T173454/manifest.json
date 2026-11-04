@@ -1,0 +1,65 @@
+{
+  "run_id": "p4-resonator-zerofreq-s0-20261104T173454",
+  "hypothesis": "H001",
+  "plan_rev": "R3",
+  "purpose": "dense pilot training: resonator / zerofreq",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=zerofreq seed=0",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T17:34:54Z",
+  "status": "passed",
+  "git_commit": "a3ee9568f1a6578f3fa393532d7e52df05493373",
+  "git_dirty": true,
+  "source_patch_sha256": "d7a2c64729e66afdb3c0e81dd0d739bdacbfba4a39561b02572b5fa3a742ae15",
+  "untracked_src_sha256": {},
+  "config": {
+    "task": "resonator",
+    "model": "zerofreq",
+    "seed": 0,
+    "n_train": 4000,
+    "n_val": 500,
+    "steps": 1500,
+    "batch_size": 32,
+    "lr": 0.003,
+    "weight_decay": 0.0,
+    "clip": 1.0,
+    "eval_every": 250,
+    "max_minutes": 25,
+    "threads": 4,
+    "model_cfg": {
+      "groups": 8,
+      "modes": 32,
+      "d_model": 256,
+      "d_hidden": 64,
+      "omega_max": 3.0,
+      "gamma_init": [
+        0.005,
+        0.5
+      ]
+    },
+    "gru_hidden": 225
+  },
+  "config_sha256": "6fca344f82372347741e60e2254b37aedabe7735a045f5f4a967f44b0d385a06",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 79597,
+  "end_utc": "2026-11-04T17:42:54Z",
+  "wall_s": 480.33,
+  "device_hours": 0.1334,
+  "artifacts_sha256": {
+    "best.pt": "d93fb43fc1c01f08f5c61856a055a6365c2750d5aabf4357e27b6689e2875b91",
+    "last.pt": "cc772960e522113f22fa0ab1d75fc5641160c6a698c3786cfb6ee94155416a06",
+    "log.txt": "a1edb50297923f4eae94c12e8e84dfdb674ca0cc72e3b9126f13387b295235a7",
+    "metrics.json": "54e438a9b2a468a4244c28fe551e0088805c7630c4d1a54587b06be7612c6e67",
+    "source.patch": "d7a2c64729e66afdb3c0e81dd0d739bdacbfba4a39561b02572b5fa3a742ae15"
+  },
+  "key_result": "resonator/zerofreq/s0: best val nrmse 0.9778 @ 1500; params 152523"
+}

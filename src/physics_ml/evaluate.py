@@ -69,9 +69,14 @@ def main() -> None:
     model, mcfg, y_scale, man = load_trained(src)
     task = mcfg["task"]
     model.freeze_bounds()
-    run = Run(f"p5-eval-{task}-{mcfg['model']}", cfg.get("hypothesis", "H001"),
+    run = Run(f"p5-eval-{task}-{mcfg['model']}" + (f"-noise{cfg['input_noise']}" if cfg.get("input_noise") else ""), cfg.get("hypothesis", "H001"),
               f"policy sweep on validation for {cfg['model_run']}", {**cfg, "model_manifest_sha": man.get("config_sha256")})
     va = make(task, "val", cfg["n_val"])
+    if cfg.get("input_noise", 0.0) > 0:
+        # sensor-noise condition: additive Gaussian noise on every input sample (fixed seed); the
+        # dense reference sees the same noisy input, targets unchanged
+        nrng = np.random.default_rng(cfg["seed"] + 5)
+        va.x = (va.x + cfg["input_noise"] * nrng.standard_normal(va.x.shape)).astype(np.float32)
     x = torch.from_numpy(va.x); dt = torch.from_numpy(va.dt)
     y = torch.from_numpy(va.y); mask = torch.from_numpy(va.mask).float()
     # output units: declared tolerances are multiples of the training-target RMS (regression) or
@@ -79,8 +84,12 @@ def main() -> None:
     unit = float(torch.linalg.vector_norm(y_scale)) if task == "resonator" else 1.0
     with torch.no_grad():
         dense = model(x, dt, mode="dense").predictions
+        # same streaming arithmetic as the policies, all writes (tau=-inf keeps every group): the
+        # reference for raw bound excess, separating float32 scan-vs-loop ordering from policy error
+        sdense = model(x, dt, mode="masked_ref", policy="threshold", tau=-float("inf")).predictions
+    scan_vs_stream = float(torch.linalg.vector_norm(sdense - dense, dim=-1).max())
     dm = task_metric(task, dense, y, mask, y_scale)
-    run.log(f"dense val {dm}; output unit {unit:.4f}")
+    run.log(f"dense val {dm}; output unit {unit:.4f}; scan-vs-stream dense max dev {scan_vs_stream:.3e}")
     if task == "recall":
         top2 = dense[:, -1].topk(2, -1).values
         margin = top2[:, 0] - top2[:, 1]
@@ -96,8 +105,12 @@ def main() -> None:
             m = task_metric(task, r.predictions, y, mask, y_scale)
             row = {"policy": name, "param": val, "write_frac": float(r.selected_writes.float().mean() / G),
                    "dev_max": float(dev.max()) / unit, "dev_mean": float(dev.mean()) / unit, **m}
+            sdev = torch.linalg.vector_norm(r.predictions - sdense, dim=-1)
+            row["dev_max_vs_stream_dense"] = float(sdev.max()) / unit
             if r.bounds is not None:
                 b = r.bounds
+                row["stream_bound_pos_excess_count"] = int((sdev > b).sum())
+                row["stream_max_raw_excess"] = float((sdev - b).max())
                 row["bound_max"] = float(b.max()) / unit
                 pos = b > 0
                 row["tightness_median"] = float((dev[pos] / b[pos]).median()) if pos.any() else None
@@ -145,7 +158,7 @@ def main() -> None:
             _, _, w = eng.run(xs[0], dts[0], **methods[name])
             timing[name]["engine_write_frac_seq0"] = float(w.mean() / G)
         run.log(f"timing: {json.dumps(timing)}")
-    metrics = {"dense_val": dm, "unit": unit, "rows": rows, "operating_points": ops, "timing": timing}
+    metrics = {"dense_val": dm, "unit": unit, "scan_vs_stream_dense_max_dev": scan_vs_stream, "rows": rows, "operating_points": ops, "timing": timing}
     best = {k: v.get("speedup_vs_dense_fused", [None])[0] for k, v in timing.items() if k != "dense_fused"}
     key = f"{task}/{mcfg['model']}: dense {dm}; op write_frac " + ", ".join(
         f"{k}={ops[k]['write_frac']:.3f}" if ops.get(k) else f"{k}=none" for k in sweeps) + f"; speedups {best}"
