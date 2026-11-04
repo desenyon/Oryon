@@ -1,0 +1,65 @@
+{
+  "run_id": "p4-recall-zerofreq-s0-20261104T175412",
+  "hypothesis": "H001",
+  "plan_rev": "R3",
+  "purpose": "dense pilot training: recall / zerofreq",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=recall model=zerofreq seed=0",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T17:54:12Z",
+  "status": "passed",
+  "git_commit": "3b36358ddc76d25c20cf43de2768855e1a6d6fe1",
+  "git_dirty": true,
+  "source_patch_sha256": "16744b61a4a5d26af701dcb10c7f6175af0b0768752d7622d09cc5feeb4391ee",
+  "untracked_src_sha256": {},
+  "config": {
+    "task": "recall",
+    "model": "zerofreq",
+    "seed": 0,
+    "n_train": 4000,
+    "n_val": 500,
+    "steps": 1500,
+    "batch_size": 32,
+    "lr": 0.003,
+    "weight_decay": 0.0,
+    "clip": 1.0,
+    "eval_every": 250,
+    "max_minutes": 25,
+    "threads": 4,
+    "model_cfg": {
+      "groups": 8,
+      "modes": 32,
+      "d_model": 256,
+      "d_hidden": 64,
+      "omega_max": 3.0,
+      "gamma_init": [
+        0.005,
+        0.5
+      ]
+    },
+    "gru_hidden": 225
+  },
+  "config_sha256": "76aa567efe6b91aff6f7b7cb48ac3aca2017abc44a590f30d19f51ec97d4150f",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 80806,
+  "end_utc": "2026-11-04T18:02:31Z",
+  "wall_s": 499.65,
+  "device_hours": 0.1388,
+  "artifacts_sha256": {
+    "best.pt": "86bf8bacb82774509d37eff6618cafe29ae085ba9744f2ff1d7e4b085ca2acdf",
+    "last.pt": "ddbd772a6dda959b2bdfd8affea313bc96b980d42e99fbcd66c1d0f74b318a76",
+    "log.txt": "30226c282b66698394c67dfb43267d6be3d0ff0f55521fefc368cf2455ee25b8",
+    "metrics.json": "e46cc88300a76bbc9baa46f538d7f26f125141853481d2039aac8e962379038b",
+    "source.patch": "16744b61a4a5d26af701dcb10c7f6175af0b0768752d7622d09cc5feeb4391ee"
+  },
+  "key_result": "recall/zerofreq/s0: best val acc 1.0000 @ 250; params 156880"
+}

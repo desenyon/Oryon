@@ -14,7 +14,7 @@ policies:
   - {name: oracle,    grid: [0.01, 0.03, 0.1, 0.3, 1.0, 3.0]}
   - {name: threshold, grid: [0.003, 0.01, 0.03, 0.1, 0.3, 1.0]}
   - {name: delta,     grid: [0.01, 0.03, 0.1, 0.3, 1.0, 3.0]}
-input_noise: 0.0       # >0: additive Gaussian sensor noise on validation inputs (normalized? no: raw input units)
+input_noise: 0.0       # >0: additive Gaussian sensor noise (raw input units) on validation inputs
 time_ops: true
 n_time_seqs: 20
 timing_reps: 40

@@ -1,0 +1,58 @@
+diff --git a/experiments/index.csv b/experiments/index.csv
+index c3e709b..0c65116 100644
+--- a/experiments/index.csv
++++ b/experiments/index.csv
+@@ -15,3 +15,4 @@ p5-eval-resonator-osc-20261104T172806,H001,R3,policy sweep on validation for run
+ p4-resonator-osc-s0-20261104T172656,H001,R2,dense pilot training: resonator / osc,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=osc seed=0,passed,2026-11-04T17:26:56Z,2026-11-04T17:34:49Z,472.65,cpu,0.1313,runs/p4-resonator-osc-s0-20261104T172656,resonator/osc/s0: best val nrmse 0.0054 @ 1500; params 152779
+ p4-resonator-zerofreq-s0-20261104T173454,H001,R3,dense pilot training: resonator / zerofreq,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=zerofreq seed=0,passed,2026-11-04T17:34:54Z,2026-11-04T17:42:54Z,480.33,cpu,0.1334,runs/p4-resonator-zerofreq-s0-20261104T173454,resonator/zerofreq/s0: best val nrmse 0.9778 @ 1500; params 152523
+ p5-eval-resonator-osc-20261104T174323,H001,R3,policy sweep on validation for runs/p4-resonator-osc-s0-20261104T172656,python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval.yaml --set model_run=runs/p4-resonator-osc-s0-20261104T172656 time_ops=false threads=2,passed,2026-11-04T17:43:23Z,2026-11-04T17:43:37Z,14.7,cpu,0.0041,runs/p5-eval-resonator-osc-20261104T174323,"resonator/osc: dense {'nrmse': 0.00548946438357234}; op write_frac certified=1.000, cdelta=0.165, oracle=1.000, threshold=1.000, delta=0.164; speedups {}"
++p4-resonator-gru-s0-20261104T174300,H001,R3,dense pilot training: resonator / gru,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=gru seed=0,passed,2026-11-04T17:43:00Z,2026-11-04T17:45:25Z,144.76,cpu,0.0402,runs/p4-resonator-gru-s0-20261104T174300,resonator/gru/s0: best val nrmse 0.1212 @ 1500; params 155253
+diff --git a/runs/p4-resonator-gru-s0-20261104T174300/best.pt b/runs/p4-resonator-gru-s0-20261104T174300/best.pt
+index f7b80d4..8927bbc 100644
+Binary files a/runs/p4-resonator-gru-s0-20261104T174300/best.pt and b/runs/p4-resonator-gru-s0-20261104T174300/best.pt differ
+diff --git a/runs/p4-resonator-gru-s0-20261104T174300/last.pt b/runs/p4-resonator-gru-s0-20261104T174300/last.pt
+index ad9b904..97452db 100644
+Binary files a/runs/p4-resonator-gru-s0-20261104T174300/last.pt and b/runs/p4-resonator-gru-s0-20261104T174300/last.pt differ
+diff --git a/runs/p4-resonator-gru-s0-20261104T174300/log.txt b/runs/p4-resonator-gru-s0-20261104T174300/log.txt
+index d0a5c70..f783cef 100644
+--- a/runs/p4-resonator-gru-s0-20261104T174300/log.txt
++++ b/runs/p4-resonator-gru-s0-20261104T174300/log.txt
+@@ -3,3 +3,6 @@
+ [2026-11-04T17:43:51Z] step 500 loss 0.1590 val {'nrmse': 0.38890605854500127} best {'nrmse': 0.38890605854500127, 'step': 500}
+ [2026-11-04T17:44:14Z] step 750 loss 0.0382 val {'nrmse': 0.2239321410221979} best {'nrmse': 0.2239321410221979, 'step': 750}
+ [2026-11-04T17:44:37Z] step 1000 loss 0.0189 val {'nrmse': 0.14103017060617504} best {'nrmse': 0.14103017060617504, 'step': 1000}
++[2026-11-04T17:45:01Z] step 1250 loss 0.0133 val {'nrmse': 0.12465263989974107} best {'nrmse': 0.12465263989974107, 'step': 1250}
++[2026-11-04T17:45:24Z] step 1500 loss 0.0157 val {'nrmse': 0.1211693740641731} best {'nrmse': 0.1211693740641731, 'step': 1500}
++[2026-11-04T17:45:25Z] resonator/gru/s0: best val nrmse 0.1212 @ 1500; params 155253
+diff --git a/runs/p4-resonator-gru-s0-20261104T174300/manifest.json b/runs/p4-resonator-gru-s0-20261104T174300/manifest.json
+index ed2a112..aae614b 100644
+--- a/runs/p4-resonator-gru-s0-20261104T174300/manifest.json
++++ b/runs/p4-resonator-gru-s0-20261104T174300/manifest.json
+@@ -6,7 +6,7 @@
+   "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=gru seed=0",
+   "cwd": "/Users/desenyon/Developer/Oryon",
+   "start_utc": "2026-11-04T17:43:00Z",
+-  "status": "running",
++  "status": "passed",
+   "git_commit": "a3ee9568f1a6578f3fa393532d7e52df05493373",
+   "git_dirty": true,
+   "source_patch_sha256": "141dd3accc3204a579c386b26a49979180ed93d76c65e5e3dae5230fe1a23b69",
+@@ -50,5 +50,16 @@
+     "device": "cpu",
+     "mps_available": true
+   },
+-  "pid": 80308
++  "pid": 80308,
++  "end_utc": "2026-11-04T17:45:25Z",
++  "wall_s": 144.76,
++  "device_hours": 0.0402,
++  "artifacts_sha256": {
++    "best.pt": "43c001560649fd5f811a3b6a4c19459b29334215e4263b786920f0af24694f72",
++    "last.pt": "f04e81a3b2cfee58827eac772445dff01f619ec6b1e9a6589431cd87ca57b0f7",
++    "log.txt": "0ce0392ab519808b574c0188d26479e45e26246936416036d57bbda5985d9e47",
++    "metrics.json": "1f19b02d77aac29a8d9e3d5792399a191ea66a05ab3ff993747618c090767389",
++    "source.patch": "141dd3accc3204a579c386b26a49979180ed93d76c65e5e3dae5230fe1a23b69"
++  },
++  "key_result": "resonator/gru/s0: best val nrmse 0.1212 @ 1500; params 155253"
+ }
+\ No newline at end of file

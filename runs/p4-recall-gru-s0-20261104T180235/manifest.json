@@ -1,0 +1,65 @@
+{
+  "run_id": "p4-recall-gru-s0-20261104T180235",
+  "hypothesis": "H001",
+  "plan_rev": "R3",
+  "purpose": "dense pilot training: recall / gru",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=recall model=gru seed=0",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T18:02:35Z",
+  "status": "passed",
+  "git_commit": "3b36358ddc76d25c20cf43de2768855e1a6d6fe1",
+  "git_dirty": true,
+  "source_patch_sha256": "6b213f146d8932719ed0b6cac69a7a16ea40e3f1a85cbcf91fe930e445e2bd88",
+  "untracked_src_sha256": {},
+  "config": {
+    "task": "recall",
+    "model": "gru",
+    "seed": 0,
+    "n_train": 4000,
+    "n_val": 500,
+    "steps": 1500,
+    "batch_size": 32,
+    "lr": 0.003,
+    "weight_decay": 0.0,
+    "clip": 1.0,
+    "eval_every": 250,
+    "max_minutes": 25,
+    "threads": 4,
+    "model_cfg": {
+      "groups": 8,
+      "modes": 32,
+      "d_model": 256,
+      "d_hidden": 64,
+      "omega_max": 3.0,
+      "gamma_init": [
+        0.005,
+        0.5
+      ]
+    },
+    "gru_hidden": 225
+  },
+  "config_sha256": "51a1d9114f7ef3b9437134b6817e484fe7af59d6bd85ad873d893f80cf050eca",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 81020,
+  "end_utc": "2026-11-04T18:04:58Z",
+  "wall_s": 143.22,
+  "device_hours": 0.0398,
+  "artifacts_sha256": {
+    "best.pt": "8eb3b4003c8b9997cb724a7e88968fbc255a00b0b841054c7a4f450abd1f7c8e",
+    "last.pt": "795e6d7995090af90c5b7bcabe8a931bab0b5c8c2081a144628e489c898aa7c8",
+    "log.txt": "a586580cc38a3350fca0fe16ba4c34123cc8a83404e2b664a401b99fdc1a026c",
+    "metrics.json": "e06b73fe376f8982b04221a33b67e91782e279dc02b176f47768e9037fa7c9ef",
+    "source.patch": "6b213f146d8932719ed0b6cac69a7a16ea40e3f1a85cbcf91fe930e445e2bd88"
+  },
+  "key_result": "recall/gru/s0: best val acc 0.1440 @ 750; params 161783"
+}
