@@ -1,0 +1,109 @@
+{
+  "run_id": "p5-eval-recall-zerofreq-noise0.05-20261104T180656",
+  "hypothesis": "H001",
+  "plan_rev": "R3",
+  "purpose": "policy sweep on validation for runs/p4-recall-zerofreq-s0-20261104T175412",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval.yaml --set model_run=runs/p4-recall-zerofreq-s0-20261104T175412 input_noise=0.05",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T18:06:56Z",
+  "status": "passed",
+  "git_commit": "86513e77a4e06b061e39e7e5fbb5f75a43766770",
+  "git_dirty": true,
+  "source_patch_sha256": "d20041ffdb7861b764336d72ee592469e37db48ac664713ebedc9d9017ebed60",
+  "untracked_src_sha256": {},
+  "config": {
+    "hypothesis": "H001",
+    "model_run": "runs/p4-recall-zerofreq-s0-20261104T175412",
+    "n_val": 200,
+    "seed": 11,
+    "threads": 4,
+    "tol_rel_rmse": 0.02,
+    "tol_acc_pp": 0.5,
+    "policies": [
+      {
+        "name": "certified",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0
+        ]
+      },
+      {
+        "name": "cdelta",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0
+        ]
+      },
+      {
+        "name": "oracle",
+        "grid": [
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0
+        ]
+      },
+      {
+        "name": "threshold",
+        "grid": [
+          0.003,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0
+        ]
+      },
+      {
+        "name": "delta",
+        "grid": [
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0
+        ]
+      }
+    ],
+    "input_noise": 0.05,
+    "time_ops": true,
+    "n_time_seqs": 20,
+    "timing_reps": 40,
+    "model_manifest_sha": "76aa567efe6b91aff6f7b7cb48ac3aca2017abc44a590f30d19f51ec97d4150f"
+  },
+  "config_sha256": "98e92364e8f55b150e795c6a690d32af1ed48c768c1476d646ed910791a4d8d8",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 81216,
+  "end_utc": "2026-11-04T18:07:10Z",
+  "wall_s": 13.88,
+  "device_hours": 0.0039,
+  "artifacts_sha256": {
+    "log.txt": "3e30b7fbfdcbf580894f4d6b4caec292e79c178d279feb10ce8ba0a5f0ed889b",
+    "metrics.json": "388f9d7690143c50e9ff5f9261b5f523e2552edf68d368e68f1ac2c129644bf7",
+    "source.patch": "d20041ffdb7861b764336d72ee592469e37db48ac664713ebedc9d9017ebed60"
+  },
+  "key_result": "recall/zerofreq: dense {'acc': 0.13500000536441803}; op write_frac certified=0.988, cdelta=0.988, oracle=0.977, threshold=0.985, delta=0.998; speedups {'certified': 0.9087278396885733, 'cdelta': 0.8106051541861189, 'threshold': 0.9098234100542354, 'delta': 0.8837527960410451}"
+}
