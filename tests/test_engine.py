@@ -50,3 +50,20 @@ def test_compiled_engine_matches_numpy_engine(setup, policy, kw):
     assert np.array_equal(w0, w1)
     if b0 is not None:
         assert np.allclose(b0, b1, rtol=1e-4, atol=1e-6)
+
+
+@pytest.mark.parametrize("eps", [0.0, 0.5, 5.0])
+def test_cdelta_compiled_matches_model_and_bound_holds(setup, eps):
+    from physics_ml.engine_nb import CompiledEngine
+
+    m, eng, x, dt = setup
+    ref = m(x, dt, mode="masked_ref", policy="cdelta", epsilon=eps)
+    sel = m(x, dt, mode="selective", policy="cdelta", epsilon=eps)
+    y, b, w = CompiledEngine(m).run(x[0].numpy(), dt[0].numpy(), policy="cdelta", epsilon=eps)
+    assert torch.allclose(ref.predictions, sel.predictions, atol=1e-5)
+    assert np.allclose(y, ref.predictions[0].numpy(), atol=1e-4)
+    assert np.array_equal(w, sel.evaluated_writes[0].numpy())
+    assert np.allclose(b, ref.bounds[0].numpy(), rtol=1e-4, atol=1e-6)
+    dense = m(x, dt).predictions.detach()
+    dev = torch.linalg.vector_norm(ref.predictions - dense, dim=-1)
+    assert (dev <= ref.bounds + 1e-4).all() and (ref.bounds <= eps + 1e-6).all()

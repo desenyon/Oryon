@@ -1,0 +1,7 @@
+[2026-11-04T17:21:23Z] shape {'groups': 8, 'modes': 8, 'd_model': 64, 'd_hidden': 64}: dense 1.8us/step f=0.231 ceiling 1.30x [1.29,1.31] cert-all-omit 1.25x cert-all-write 0.87x MAC write frac 0.59
+[2026-11-04T17:21:23Z] shape {'groups': 8, 'modes': 16, 'd_model': 128, 'd_hidden': 64}: dense 3.5us/step f=0.419 ceiling 1.72x [1.71,1.73] cert-all-omit 1.67x cert-all-write 0.82x MAC write frac 0.75
+[2026-11-04T17:21:23Z] shape {'groups': 8, 'modes': 32, 'd_model': 256, 'd_hidden': 64}: dense 5.7us/step f=0.390 ceiling 1.64x [1.63,1.64] cert-all-omit 1.61x cert-all-write 0.89x MAC write frac 0.86
+[2026-11-04T17:21:24Z] shape {'groups': 8, 'modes': 64, 'd_model': 256, 'd_hidden': 128}: dense 8.8us/step f=0.413 ceiling 1.70x [1.70,1.70] cert-all-omit 1.69x cert-all-write 0.92x MAC write frac 0.87
+[2026-11-04T17:21:25Z] shape {'groups': 16, 'modes': 32, 'd_model': 512, 'd_hidden': 128}: dense 14.5us/step f=0.492 ceiling 1.97x [1.96,1.97] cert-all-omit 1.94x cert-all-write 0.87x MAC write frac 0.87
+[2026-11-04T17:21:25Z] shape {'groups': 4, 'modes': 64, 'd_model': 512, 'd_hidden': 128}: dense 9.2us/step f=0.422 ceiling 1.73x [1.72,1.73] cert-all-omit 1.72x cert-all-write 0.97x MAC write frac 0.78
+[2026-11-04T17:21:25Z] max cert-all-omit speedup 1.94x at d_model=512 modes=32 (f=0.49); min cert-all-write 0.82x

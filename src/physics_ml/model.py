@@ -14,6 +14,9 @@ Policies (how the mask is chosen in masked_ref / selective):
               write: diagnostic only, never an efficiency result).
   threshold   heuristic: omit when c_i*beta_i < tau (no ledger, bounds None).
   delta       Delta-network-style baseline: cached projection reused unless ||u_t - u_cache|| > tau.
+  cdelta      CERTIFIED delta baseline (review_1): per-group cached projection W_i u^_i is written
+              (times the fresh gate) unless refreshed; ledger with beta = |g| wbar ||u - u^_i||;
+              refresh decisions by the same budget policy. "Omitted" = reused cache, not dropped.
 """
 from __future__ import annotations
 
@@ -149,7 +152,7 @@ class OscillatorSSM(nn.Module):
         G, m = self.G, self.m
         cache = self.bounds()
         wbar, c = cache.wbar.to(x.dtype), cache.c.to(x.dtype)
-        if policy in ("certified", "oracle"):
+        if policy in ("certified", "oracle", "cdelta"):
             if epsilon is None:
                 raise ValueError("certified/oracle policy needs epsilon")
             eps = torch.as_tensor(epsilon, dtype=x.dtype).expand(B).clone()
@@ -163,7 +166,9 @@ class OscillatorSSM(nn.Module):
         ys, bs, evs = [], [], []
         u_cache = None
         b_cache = None
-        status = "exact-arithmetic bound; float observed only" if policy in ("certified", "oracle") else "no bound"
+        status = "exact-arithmetic bound; float observed only" if policy in ("certified", "oracle", "cdelta") else "no bound"
+        uh = x.new_zeros(B, G, self.d)  # cdelta per-group cached inputs (u^ = 0 -> plain omission)
+        pc = x.new_zeros(B, G, 2 * m)  # cdelta per-group cached projections W_i u^_i
         for t in range(T):
             u = self.encode(x[:, t])
             g = self.gates(u)
@@ -179,6 +184,12 @@ class OscillatorSSM(nn.Module):
                 beta = torch.linalg.vector_norm(full, dim=-1)
                 om = choose_omissions(e, rho, beta, c, eps)
                 e = update_error(e, rho, beta, om)
+            elif policy == "cdelta":
+                beta = g.abs() * wbar[None] * torch.linalg.vector_norm(u[:, None] - uh, dim=-1)
+                om = choose_omissions(e, rho, beta, c, eps)
+                if t == 0:
+                    om = torch.zeros_like(om)  # no cache yet: compute every write
+                e = update_error(e, rho, beta, om)
             elif policy == "threshold":
                 beta = write_bound(g, wbar, u)
                 om = c[None] * beta < tau
@@ -191,7 +202,19 @@ class OscillatorSSM(nn.Module):
             else:
                 raise ValueError(policy)
             keep = ~om
-            if policy == "delta":
+            if policy == "cdelta":
+                if mode == "masked_ref":
+                    full = torch.einsum("gkd,bd->bgk", self.W, u)
+                    pc = torch.where(keep[..., None], full, pc)
+                    n_eval = torch.full((B,), G, device=x.device)
+                else:
+                    n_eval = keep.sum(-1)
+                    for bi_, gi in keep.nonzero().tolist():
+                        pc[bi_, gi] = torch.mv(self.W[gi], u[bi_])
+                uh = torch.where(keep[..., None], u[:, None].expand(B, G, self.d), uh)
+                bb = (pc * g[..., None]).view(B, G, m, 2)
+                hr, hi = hr + bb[..., 0], hi + bb[..., 1]
+            elif policy == "delta":
                 # recompute projection only when input moved; reuse cached b otherwise (gate fresh)
                 if b_cache is None:
                     b_cache = x.new_zeros(B, G, 2 * m)
@@ -220,7 +243,7 @@ class OscillatorSSM(nn.Module):
                     hi[bi_, gi] += w[:, 1]
             ys.append(self.readout(hr, hi, u))
             evs.append(n_eval)
-            if policy in ("certified", "oracle"):
+            if policy in ("certified", "oracle", "cdelta"):
                 bs.append(output_bound(e, c))
         y = torch.stack(ys, 1)
         bounds = torch.stack(bs, 1) if bs else None

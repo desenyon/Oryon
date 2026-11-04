@@ -5,7 +5,7 @@ bounds, ledger, stable selection, oscillator evolution, genuinely selected proje
 is one compiled loop, so timing reflects arithmetic and memory rather than interpreter overhead.
 Kept groups and the dense path use the same Accelerate sgemv kernel (per-group calls). Policies:
 0 dense | 1 nowrite (ceiling only) | 2 certified | 3 threshold | 4 delta | 5 oracle (diagnostic) |
-6 dense_fused (one sgemv over all groups: the fastest dense reference, used as speedup denominator).
+7 cdelta (certified delta baseline) | 6 dense_fused (one sgemv over all groups: the fastest dense reference, used as speedup denominator).
 """
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ import numpy as np
 
 from .model import OscillatorSSM
 
-POLICIES = {"dense": 0, "nowrite": 1, "certified": 2, "threshold": 3, "delta": 4, "oracle": 5, "dense_fused": 6}
+POLICIES = {"dense": 0, "nowrite": 1, "certified": 2, "threshold": 3, "delta": 4, "oracle": 5, "dense_fused": 6, "cdelta": 7}
 
 
 import ctypes  # noqa: E402
@@ -60,6 +60,7 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
     u_cache = np.zeros(d, np.float32)
     b_cache = np.zeros(G * M2, np.float32)
     have_cache = False
+    uh = np.zeros((G, d), np.float32)
     AR = np.empty(G * m, np.float32)
     AI = np.empty(G * m, np.float32)
     rho_c = np.empty(G, np.float32)
@@ -112,7 +113,7 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
                 for k in range(M2):
                     h[i * M2 + k] += full[i * M2 + k] * g[i]
             nw = G
-        elif policy == 2 or policy == 5:
+        elif policy == 2 or policy == 5 or policy == 7:
             if policy == 5:
                 for i in range(G):
                     _mv(Wflat, i * M2, (i + 1) * M2, u, buf)
@@ -121,6 +122,13 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
                         full[i * M2 + k] = buf[k] * g[i]
                         s += full[i * M2 + k] * full[i * M2 + k]
                     beta[i] = math.sqrt(s)
+            elif policy == 7:
+                for i in range(G):
+                    s2 = np.float32(0.0)
+                    for k in range(d):
+                        dd = u[k] - uh[i, k]
+                        s2 += dd * dd
+                    beta[i] = wbar[i] * g[i] * math.sqrt(s2) if t > 0 else np.float32(np.inf)
             else:
                 for i in range(G):
                     beta[i] = wbar[i] * g[i] * unorm
@@ -157,8 +165,18 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
             for i in range(G):
                 if om[i]:
                     e[i] += beta[i]
+                    if policy == 7:
+                        for k in range(M2):
+                            h[i * M2 + k] += b_cache[i * M2 + k] * g[i]
                 else:
-                    if policy == 2:
+                    if policy == 7:
+                        _mv(Wflat, i * M2, (i + 1) * M2, u, buf)
+                        for k in range(M2):
+                            b_cache[i * M2 + k] = buf[k]
+                            h[i * M2 + k] += buf[k] * g[i]
+                        for k in range(d):
+                            uh[i, k] = u[k]
+                    elif policy == 2:
                         _mv(Wflat, i * M2, (i + 1) * M2, u, buf)
                         for k in range(M2):
                             h[i * M2 + k] += buf[k] * g[i]
@@ -221,4 +239,4 @@ class CompiledEngine:
         bounds = np.zeros(T, np.float32)
         writes = np.empty(T, np.int32)
         _run(x, dt, *self.args, self.G, self.m, POLICIES[policy], float(epsilon), float(tau), y, bounds, writes)
-        return y, (bounds if policy in ("certified", "oracle") else None), writes
+        return y, (bounds if policy in ("certified", "oracle", "cdelta") else None), writes
