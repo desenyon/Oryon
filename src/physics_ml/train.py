@@ -181,7 +181,7 @@ def main() -> None:
     if status != "passed":
         run.finalize(status, {"best_val": best, "history": hist, "reason": "interrupted or failed before completion"},
                      f"{status} at step {hist[-1]['step'] if hist else 'n/a'}")
-        return
+        raise SystemExit(3)  # non-zero so batch scripts cannot mistake an incomplete run for success
     model.load_state_dict(torch.load(run.dir / "best.pt"))
     final = {"best_val": best, "params": n_params(model), "history": hist}
     if status == "passed":

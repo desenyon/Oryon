@@ -124,7 +124,7 @@ def main() -> None:
             else:
                 row["acc_drop_pp"] = 100 * (dm["acc"] - m["acc"])
             rows.append(row)
-            run.log(json.dumps({k: (round(v, 5) if isinstance(v, float) else v) for k, v in row.items()}))
+            run.log(json.dumps({k: (float(f"{v:.4g}") if isinstance(v, float) else v) for k, v in row.items()}))  # sig. figs: tiny excesses stay visible
         sweeps.append(name)
     # operating points: fewest writes meeting the preregistered quality tolerance on validation
     ok = (lambda r: r["rel_rmse_increase"] <= cfg["tol_rel_rmse"]) if task == "resonator" else (lambda r: r["acc_drop_pp"] <= cfg["tol_acc_pp"])
