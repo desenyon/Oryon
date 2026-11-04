@@ -1,6 +1,6 @@
 # SPEC — H001 certified selective-write oscillator SSM
 
-Revision: S1 (2026-11-04). Source: CODEX_RESEARCH_PLAN.md v1.0 §3, bootstrapped verbatim in substance.
+Revision: S2 (2026-11-04; S1 = bootstrap from CODEX_RESEARCH_PLAN.md v1.0 §3; S2 adds §5b and B1).
 Changes to this file are logged in docs/DECISIONS.md.
 
 ## 1. Model (dense reference)
