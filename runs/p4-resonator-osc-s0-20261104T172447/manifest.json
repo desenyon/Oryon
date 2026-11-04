@@ -1,0 +1,71 @@
+{
+  "run_id": "p4-resonator-osc-s0-20261104T172447",
+  "hypothesis": "H001",
+  "plan_rev": "R2",
+  "purpose": "dense pilot training: resonator / osc",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set steps=30 eval_every=15 n_train=200 n_val=50",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T17:24:47Z",
+  "status": "passed",
+  "git_commit": "34c5c1f4f69f33296ef8f83837750582f0093916",
+  "git_dirty": false,
+  "source_patch_sha256": null,
+  "untracked_src_sha256": {},
+  "config": {
+    "task": "resonator",
+    "model": "osc",
+    "seed": 0,
+    "n_train": 200,
+    "n_val": 50,
+    "steps": 30,
+    "batch_size": 32,
+    "lr": 0.003,
+    "weight_decay": 0.0,
+    "clip": 1.0,
+    "eval_every": 15,
+    "max_minutes": 25,
+    "threads": 4,
+    "model_cfg": {
+      "groups": 8,
+      "modes": 32,
+      "d_model": 256,
+      "d_hidden": 64,
+      "omega_max": 3.0,
+      "gamma_init": [
+        0.005,
+        0.5
+      ]
+    },
+    "gru_hidden": 225
+  },
+  "config_sha256": "c54bfcd71f6f2d181bce615c4f58bfe40f51197d2c3837346933ec2098701913",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 79022,
+  "end_utc": "2026-11-04T17:25:13Z",
+  "wall_s": 10.44,
+  "device_hours": 0.0029,
+  "artifacts_sha256": {
+    "best.pt": "de9eed118ee732f2d69bf690e1a62196342c6e9f745710660a6c09b0dfa71365",
+    "last.pt": "e9ccbd16a908213b27d1bb138a5c1833757dc8b27da5ca640b535ca82837c1f9",
+    "log.txt": "484ea66aae9f461c2ddc07585ce3dcea7da6e8cf2d1ff8b5f657afb3d87cf15b",
+    "metrics.json": "a0e3b2acde1f0193a760f64be09b1d35ea1743130a1dc74437554e77bf0ad79d"
+  },
+  "key_result": "resonator/osc/s0: best val nrmse 0.3315 @ 30; params 152779",
+  "resumes": [
+    {
+      "utc": "2026-11-04T17:25:12Z",
+      "pid": 79093,
+      "git_commit": "03d3644fcdfd2bbdfbf9718687a540ed9f03b4c7"
+    }
+  ]
+}

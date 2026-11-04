@@ -105,12 +105,24 @@ def main() -> None:
     args = ap.parse_args()
     if args.resume:
         rdir = Path(args.resume)
-        cfg = json.loads((rdir / "manifest.json").read_text())["config"]
+        man = json.loads((rdir / "manifest.json").read_text())
+        if man["status"] not in ("running", "interrupted"):
+            raise SystemExit(f"refusing to resume {rdir}: status is {man['status']!r}")
+        cfg = man["config"]
+        import yaml
+
+        for kv in args.set:  # only operational keys may change on resume
+            k, v = kv.split("=", 1)
+            if k not in ("max_minutes", "threads"):
+                raise SystemExit(f"cannot override {k} on resume")
+            cfg[k] = yaml.safe_load(v)
     else:
         cfg = load_config(args.config)
         for kv in args.set:
             k, v = kv.split("=", 1)
-            cfg[k] = type(cfg[k])(v) if k in cfg and not isinstance(cfg[k], bool) else v
+            import yaml
+
+            cfg[k] = yaml.safe_load(v)
     torch.manual_seed(cfg["seed"])
     torch.set_num_threads(cfg.get("threads", 4))
     task = cfg["task"]
@@ -163,7 +175,13 @@ def main() -> None:
                         "step": step + 1, "best": best, "hist": hist, "rng": torch.get_rng_state()}, run.dir / "last.pt")
             run.log(f"step {step + 1} loss {float(loss):.4f} val {m} best {best}")
         if (time.time() - t_start) / 60 > cfg["max_minutes"]:
-            status = "interrupted"; run.log("time limit reached; resume with --resume"); break
+            torch.save({"model": model.state_dict(), "opt": opt.state_dict(), "sched": sched.state_dict(),
+                        "step": step + 1, "best": best, "hist": hist, "rng": torch.get_rng_state()}, run.dir / "last.pt")
+            status = "interrupted"; run.log(f"time limit reached at step {step + 1}; checkpoint last.pt; resume with --resume {run.dir}"); break
+    if status != "passed":
+        run.finalize(status, {"best_val": best, "history": hist, "reason": "interrupted or failed before completion"},
+                     f"{status} at step {hist[-1]['step'] if hist else 'n/a'}")
+        return
     model.load_state_dict(torch.load(run.dir / "best.pt"))
     final = {"best_val": best, "params": n_params(model), "history": hist}
     if status == "passed":

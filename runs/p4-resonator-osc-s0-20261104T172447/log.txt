@@ -1,0 +1,7 @@
+[2026-11-04T17:24:47Z] params 152779; d_in 2; d_out 3; train 200 val 50
+[2026-11-04T17:24:52Z] step 15 loss 0.3332 val {'nrmse': 0.5087191346018218} best {'nrmse': 0.5087191346018218, 'step': 15}
+[2026-11-04T17:24:57Z] step 30 loss 0.1215 val {'nrmse': 0.33146520499995774} best {'nrmse': 0.33146520499995774, 'step': 30}
+[2026-11-04T17:24:57Z] resonator/osc/s0: best val nrmse 0.3315 @ 30; params 152779
+[2026-11-04T17:25:12Z] resumed at step 30
+[2026-11-04T17:25:12Z] params 152779; d_in 2; d_out 3; train 200 val 50
+[2026-11-04T17:25:13Z] resonator/osc/s0: best val nrmse 0.3315 @ 30; params 152779

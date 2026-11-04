@@ -1,0 +1,42 @@
+diff --git a/experiments/index.csv b/experiments/index.csv
+index e8805da..90d94fa 100644
+--- a/experiments/index.csv
++++ b/experiments/index.csv
+@@ -1,6 +1,8 @@
+ run_id,hypothesis,plan_rev,purpose,command,status,start_utc,end_utc,wall_s,device,device_hours,artifact_dir,key_result
+-p2-algebra-20261104T171316,H001,R1,independent new float64 check of T1/L1 bounds (not a reproduction),python /Users/desenyon/Developer/Oryon/src/physics_ml/reproduce.py --config configs/algebra.yaml,passed,2026-11-04T17:13:16Z,2026-11-04T17:13:52Z,36.09,cpu,0.01,runs/p2-algebra-20261104T171316,"passed: policy mode state/out/budget checks 2048000/256000/256000, violations@tol 0; max raw excess float64 state 0.000e+00 out 0.000e+00 budget 0.000e+00; float32 state max excess 6.752e-04"
+-p3-bench-20261104T171739,H001,R1,"profile dense write fraction f, ceiling, controller overhead (untrained weights)",python /Users/desenyon/Developer/Oryon/src/physics_ml/benchmark.py --config configs/benchmark.yaml,passed,2026-11-04T17:17:39Z,2026-11-04T17:17:44Z,5.54,cpu,0.0015,runs/p3-bench-20261104T171739,max cert-all-omit speedup 0.97x at d_model=512 modes=32 (f=0.29); min cert-all-write 0.46x
+-p3-bench-compiled-20261104T171856,H001,R1,"profile write fraction f, ceiling, controller overhead; engine=compiled (untrained weights)",python /Users/desenyon/Developer/Oryon/src/physics_ml/benchmark.py --config configs/benchmark_compiled.yaml,passed,2026-11-04T17:18:56Z,2026-11-04T17:19:09Z,13.56,cpu,0.0038,runs/p3-bench-compiled-20261104T171856,max cert-all-omit speedup 9.32x at d_model=512 modes=32 (f=0.89); min cert-all-write 0.98x
+-p3-bench-compiled-20261104T172054,H001,R1,"profile write fraction f, ceiling, controller overhead; engine=compiled (untrained weights)",python /Users/desenyon/Developer/Oryon/src/physics_ml/benchmark.py --config configs/benchmark_compiled.yaml,passed,2026-11-04T17:20:54Z,2026-11-04T17:20:58Z,4.37,cpu,0.0012,runs/p3-bench-compiled-20261104T172054,max cert-all-omit speedup 1.74x at d_model=512 modes=32 (f=0.43); min cert-all-write 0.83x
+-p3-bench-compiled-20261104T172121,H001,R1,"profile write fraction f, ceiling, controller overhead; engine=compiled (untrained weights)",python /Users/desenyon/Developer/Oryon/src/physics_ml/benchmark.py --config configs/benchmark_compiled.yaml,passed,2026-11-04T17:21:21Z,2026-11-04T17:21:25Z,3.97,cpu,0.0011,runs/p3-bench-compiled-20261104T172121,max cert-all-omit speedup 1.94x at d_model=512 modes=32 (f=0.49); min cert-all-write 0.82x
++p2-algebra-20261104T171316,H001,R1,independent new float64 check of T1/L1 bounds (not a reproduction),python /Users/desenyon/Developer/Oryon/src/physics_ml/reproduce.py --config configs/algebra.yaml,passed,2026-11-04T17:13:16Z,2026-11-04T17:13:52Z,36.09,cpu,0.01,runs/p2-algebra-20261104T171316,"passed: policy mode state/out/budget checks 2048000/256000/256000, violations@tol 0; max raw excess float64 state 0.000e+00 out 0.000e+00 budget 0.000e+00; float32 state max excess 6.752e-04"
++p3-bench-20261104T171739,H001,R1,"profile dense write fraction f, ceiling, controller overhead (untrained weights)",python /Users/desenyon/Developer/Oryon/src/physics_ml/benchmark.py --config configs/benchmark.yaml,passed,2026-11-04T17:17:39Z,2026-11-04T17:17:44Z,5.54,cpu,0.0015,runs/p3-bench-20261104T171739,max cert-all-omit speedup 0.97x at d_model=512 modes=32 (f=0.29); min cert-all-write 0.46x
++p3-bench-compiled-20261104T171856,H001,R1,"profile write fraction f, ceiling, controller overhead; engine=compiled (untrained weights)",python /Users/desenyon/Developer/Oryon/src/physics_ml/benchmark.py --config configs/benchmark_compiled.yaml,passed,2026-11-04T17:18:56Z,2026-11-04T17:19:09Z,13.56,cpu,0.0038,runs/p3-bench-compiled-20261104T171856,max cert-all-omit speedup 9.32x at d_model=512 modes=32 (f=0.89); min cert-all-write 0.98x
++p3-bench-compiled-20261104T172054,H001,R1,"profile write fraction f, ceiling, controller overhead; engine=compiled (untrained weights)",python /Users/desenyon/Developer/Oryon/src/physics_ml/benchmark.py --config configs/benchmark_compiled.yaml,passed,2026-11-04T17:20:54Z,2026-11-04T17:20:58Z,4.37,cpu,0.0012,runs/p3-bench-compiled-20261104T172054,max cert-all-omit speedup 1.74x at d_model=512 modes=32 (f=0.43); min cert-all-write 0.83x
++p3-bench-compiled-20261104T172121,H001,R1,"profile write fraction f, ceiling, controller overhead; engine=compiled (untrained weights)",python /Users/desenyon/Developer/Oryon/src/physics_ml/benchmark.py --config configs/benchmark_compiled.yaml,passed,2026-11-04T17:21:21Z,2026-11-04T17:21:25Z,3.97,cpu,0.0011,runs/p3-bench-compiled-20261104T172121,max cert-all-omit speedup 1.94x at d_model=512 modes=32 (f=0.49); min cert-all-write 0.82x
++p4-resonator-osc-s0-20261104T172447,H001,R2,dense pilot training: resonator / osc,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set steps=30 eval_every=15 n_train=200 n_val=50,passed,2026-11-04T17:24:47Z,2026-11-04T17:24:57Z,10.1,cpu,0.0028,runs/p4-resonator-osc-s0-20261104T172447,resonator/osc/s0: best val nrmse 0.3315 @ 30; params 152779
++p4-resonator-osc-s0-20261104T172447,H001,R2,dense pilot training: resonator / osc,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set steps=30 eval_every=15 n_train=200 n_val=50,quarantined-duplicate-finalize (resume of completed smoke run; see D008),2026-11-04T17:24:47Z,2026-11-04T17:25:13Z,10.44,cpu,0.0029,runs/p4-resonator-osc-s0-20261104T172447,resonator/osc/s0: best val nrmse 0.3315 @ 30; params 152779
+diff --git a/src/physics_ml/train.py b/src/physics_ml/train.py
+index 68ed96c..c1f815f 100644
+--- a/src/physics_ml/train.py
++++ b/src/physics_ml/train.py
+@@ -105,12 +105,17 @@ def main() -> None:
+     args = ap.parse_args()
+     if args.resume:
+         rdir = Path(args.resume)
+-        cfg = json.loads((rdir / "manifest.json").read_text())["config"]
++        man = json.loads((rdir / "manifest.json").read_text())
++        if man["status"] not in ("running", "interrupted"):
++            raise SystemExit(f"refusing to resume {rdir}: status is {man['status']!r}")
++        cfg = man["config"]
+     else:
+         cfg = load_config(args.config)
+         for kv in args.set:
+             k, v = kv.split("=", 1)
+-            cfg[k] = type(cfg[k])(v) if k in cfg and not isinstance(cfg[k], bool) else v
++            import yaml
++
++            cfg[k] = yaml.safe_load(v)
+     torch.manual_seed(cfg["seed"])
+     torch.set_num_threads(cfg.get("threads", 4))
+     task = cfg["task"]

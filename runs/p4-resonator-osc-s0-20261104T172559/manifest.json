@@ -1,0 +1,82 @@
+{
+  "run_id": "p4-resonator-osc-s0-20261104T172559",
+  "hypothesis": "H001",
+  "plan_rev": "R2",
+  "purpose": "dense pilot training: resonator / osc",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set steps=40 eval_every=10 n_train=200 n_val=50 max_minutes=0.02",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T17:25:59Z",
+  "status": "passed",
+  "git_commit": "03d3644fcdfd2bbdfbf9718687a540ed9f03b4c7",
+  "git_dirty": true,
+  "source_patch_sha256": "a7a178e502663a0632dd887ca36783d56485186ada9e4e2e54910f2d14f21b1c",
+  "untracked_src_sha256": {},
+  "config": {
+    "task": "resonator",
+    "model": "osc",
+    "seed": 0,
+    "n_train": 200,
+    "n_val": 50,
+    "steps": 40,
+    "batch_size": 32,
+    "lr": 0.003,
+    "weight_decay": 0.0,
+    "clip": 1.0,
+    "eval_every": 10,
+    "max_minutes": 0.02,
+    "threads": 4,
+    "model_cfg": {
+      "groups": 8,
+      "modes": 32,
+      "d_model": 256,
+      "d_hidden": 64,
+      "omega_max": 3.0,
+      "gamma_init": [
+        0.005,
+        0.5
+      ]
+    },
+    "gru_hidden": 225
+  },
+  "config_sha256": "7ed08f6d1045fc41a200f0ab3961072f803dae8ead1ac876c3b0c79ea1179a18",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 79158,
+  "end_utc": "2026-11-04T17:26:32Z",
+  "wall_s": 13.82,
+  "device_hours": 0.0038,
+  "artifacts_sha256": {
+    "best.pt": "d5f8366fdc3db0a53e103c0336d6d97e8df8703cab2ee45600ada6eee8b58af8",
+    "last.pt": "36ad916bddba46ced49e8d7c5a19a79361fe4b0204747a803efc5d9a7c1a08e2",
+    "log.txt": "231cbb5e55e81bbca1b2591746c2375331bcc8cb8a329ab11409607b8e051a32",
+    "metrics.json": "bbad0a22bbae82cdef0464678f134bc751a17edd6bfb20b73b07fba9c6f9819d",
+    "source.patch": "a7a178e502663a0632dd887ca36783d56485186ada9e4e2e54910f2d14f21b1c"
+  },
+  "key_result": "resonator/osc/s0: best val nrmse 0.1865 @ 40; params 152779",
+  "resumes": [
+    {
+      "utc": "2026-11-04T17:26:04Z",
+      "pid": 79174,
+      "git_commit": "03d3644fcdfd2bbdfbf9718687a540ed9f03b4c7"
+    },
+    {
+      "utc": "2026-11-04T17:26:08Z",
+      "pid": 79180,
+      "git_commit": "03d3644fcdfd2bbdfbf9718687a540ed9f03b4c7"
+    },
+    {
+      "utc": "2026-11-04T17:26:22Z",
+      "pid": 79206,
+      "git_commit": "03d3644fcdfd2bbdfbf9718687a540ed9f03b4c7"
+    }
+  ]
+}
