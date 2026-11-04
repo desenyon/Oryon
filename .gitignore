@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# large artifacts: checkpoints > 5 MB and raw data stay out of git; see runs/<id>/manifest.json for checksums
+runs/*/checkpoints/*.pt.large
+data/raw/
+*.egg-info/
