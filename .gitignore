@@ -6,3 +6,4 @@ __pycache__/
 runs/*/checkpoints/*.pt.large
 data/raw/
 *.egg-info/
+logs/

@@ -1,6 +1,6 @@
 # RESEARCH_PLAN (live, authoritative)
 
-Revision: R2 · 2026-11-04 · Active hypothesis: **H001** (certified selective-write oscillator SSM)
+Revision: R3 · 2026-11-04 · Active hypothesis: **H001** (certified selective-write oscillator SSM)
 
 Current claim: *Proposed, partially verified.* Bounds T1/L1 hold (exact derivation; float64
 observed). Selective execution genuinely omits work; ideal speed ceiling 1.3–2.0x in the declared
@@ -40,11 +40,14 @@ Frozen v1.0 targets: docs/SPEC.md §7. Pilot: approximation ≤0.5 pp acc / ≤2
 frozen dense; runtime ≥1.20x median vs fastest dense (D005 amendment A1: regime + denominator).
 
 ## Resources
-Tranche 8.0 device-h · 1 training process · ≤60 min/run. Consumed ≈ 0.02 device-h (index.csv).
+Tranche 8.0 device-h · 1 training process · ≤60 min/run. Consumed ≈ 0.03 device-h before pilot (index.csv); pilot seed 0 in progress (≈0.85).
 Next run estimate: P4 smoke ≈ 0.05 device-h; each pilot training run ≤ 0.25 device-h (CPU).
 
 ## Owned running jobs
-None.
+| Job | PID / host | Started (local) | Command | cwd | Log | Checkpoints |
+|---|---|---|---|---|---|---|
+| P4 pilot seed 0 (6 sequential runs: resonator,recall × osc,zerofreq,gru) | 79236 / this Mac (bash driver) | Wed Nov 4 09:26:51 2026 | `scripts/run_pilot.sh 0` | repo root | logs/pilot_s0.log + runs/p4-<task>-<model>-s0-*/log.txt | runs/p4-*/last.pt, best.pt |
+Reconcile: `ps -o pid,lstart,command -p 79236`. If dead mid-run: `uv run python -m physics_ml.train --resume runs/<interrupted id>` then rerun the remaining (task, model) pairs individually. Est. ≈ 50 min ≈ 0.85 device-h.
 
 ## Blockers
 P1b (Delta-SSM full text) needs the user (bot-check on OpenReview). Does not block P4/P5.

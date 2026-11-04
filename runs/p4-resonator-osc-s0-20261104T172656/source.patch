@@ -1,0 +1,9 @@
+diff --git a/.gitignore b/.gitignore
+index 312ce57..ce285d2 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -6,3 +6,4 @@ __pycache__/
+ runs/*/checkpoints/*.pt.large
+ data/raw/
+ *.egg-info/
++logs/
