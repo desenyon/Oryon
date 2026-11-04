@@ -23,11 +23,11 @@ Bounds T1/L1 remain valid but are 10²–10³x conservative. Oscillation benefit
 | P0–P3 | Bootstrap, prior art, algebra, execution profile | passed | — | see R2 | D001–D006 |
 | P1b | Read Delta-SSM methods | blocked | — | full text read | needs user (OpenReview 0b75H3NcHp bot check) |
 | P4 | Dense pilot seed 0 | passed (resonator osc; recall zerofreq) | P3 | learns task | D010 |
-| P4s | Seeds 1–2 for all 6 pilot configs | active | P4 | 3-seed mean ± sd for C8 | runs/p4-*-s{1,2}-* |
+| P4s | Seeds 1–2 for all 6 pilot configs | passed (recall/osc/s1 hit the 25-min cap at step 1382, resumed to 1500) | P4 | 3-seed mean ± sd for C8 | runs/p4-*-s{1,2}-* |
 | P5 | Policy sweep + diagnosis | failed (H001 rejected) | P4 | operating point meeting tolerance and 1.2x | D011, D012 |
-| P5s | Re-run P5 on seed 1–2 models (robustness of D011) | pending | P4s | same conclusion on all seeds | runs/p5-eval-* |
+| P5s | Re-run P5 on seeds 0–2 under protocol A2 (D015) | active (job below) | P4s | same conclusion on all seeds | runs/p5-eval-* |
 | P6 | Real-task confirmation of H001 | retired (H001 rejected) | — | — | D011 |
-| PV | Pivot feasibility review (2 directions) | active (agent) | D012 | recommendation with falsifiable hypothesis or stop | docs/prior_art/pivot_review.md |
+| PV | Pivot feasibility review (2 directions) | passed (pivot declined, D014) | D012 | recommendation with falsifiable hypothesis or stop | docs/prior_art/pivot_review.md |
 | P7 | Results + disposition | active | P4s, P5s, PV | reproducible; reviewer challenge | docs/RESULTS.md |
 
 ## Next three actions
@@ -44,15 +44,15 @@ Tranche 8.0 device-h. Consumed ≈ 0.68 device-h (index.csv, through P5 batch 1)
 Running: seeds 1–2 ≈ 1.2 device-h. Remaining after: ≈ 6.1 device-h.
 
 ## Owned running jobs
-| Job | PID / host | Started (local) | Command | cwd | Log | Checkpoints |
+| Job | PID / host | Started (UTC) | Command | cwd | Log | Outputs |
 |---|---|---|---|---|---|---|
-| P4 seeds 1–2 (12 sequential runs) | 81313 / this Mac (bash driver) | Wed Nov 4 10:08:53 2026 | `scripts/run_seeds.sh` | repo root | logs/pilot_s12.log; runs/p4-*-s{1,2}-*/log.txt | runs/p4-*-s{1,2}-*/last.pt, best.pt |
-Reconcile: `ps -o pid,lstart,command -p 81313`. If dead: find the newest runs/p4-*-s{1,2}-* with status running/interrupted → `uv run python -m physics_ml.train --resume <dir>`; then run remaining (task, model, seed) via `uv run python -m physics_ml.train --config configs/pilot.yaml --set task=<t> model=<m> seed=<s>` (completed configs are listed in logs/pilot_s12.log "end" lines).
-Agent (not compute): pivot review → docs/prior_art/pivot_review.md.
+| P5s A2 evals (9 sequential evals + aggregate) | bash driver / this Mac | 2026-11-04 ≈19:45Z | `scripts/run_p5s.sh > logs/p5s_A2.log 2>&1` | repo root | logs/p5s_A2.log | runs/p5-eval-*-2026110[4]T19[4-5]*, runs/p4-aggregate-* |
+Reconcile: `pgrep -fl run_p5s.sh`. Evals are stateless (no checkpoint): if dead, rerun the whole script with a fresh log; partial eval dirs from the dead attempt stay in runs/ and are marked superseded in index.csv.
+Note: runs/p5-eval-resonator-osc-20261104T1942* is an A2 smoke test (n_val=16, 4 timing seqs); not evidence.
+Note: logs/pilot_s12.log `rc=` values are unreliable (they captured `date`'s status; fixed in ce35a76); run status lives in each manifest.json.
 
 ## Blockers
 P1b needs user access. Real-task data (P6/pivot) would need a download → ask user first.
 
 ## Next command
-`grep "===" logs/pilot_s12.log` (check seed job), then evaluate seed models:
-`uv run python -m physics_ml.evaluate --config configs/policy_eval.yaml --set model_run=<runs/p4-resonator-osc-s1-...>`
+When the job above finishes: `grep -E "^seed|speedups" logs/p5s_A2.log`; read runs/p4-aggregate-*/metrics.json; then append D016 (does D011 hold under A2 on 3 seeds?), write RESULTS RS2, plan R5.
