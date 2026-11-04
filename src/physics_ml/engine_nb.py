@@ -60,6 +60,10 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
     u_cache = np.zeros(d, np.float32)
     b_cache = np.zeros(G * M2, np.float32)
     have_cache = False
+    AR = np.empty(G * m, np.float32)
+    AI = np.empty(G * m, np.float32)
+    rho_c = np.empty(G, np.float32)
+    last_dt = np.float32(0.0)
     K = np.float32(math.sqrt(2.0 / math.pi))
     for t in range(T):
         for k in range(d_in):
@@ -78,16 +82,23 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
         for i in range(G):
             g[i] = np.float32(1.0) / (np.float32(1.0) + math.exp(-(g[i] + bg[i])))
         dtt = dt[t]
+        # transition coefficients, recomputed only when dt changes (shared by every policy)
+        if t == 0 or dtt != last_dt:
+            for i in range(G):
+                rho_c[i] = math.exp(-gmin[i] * dtt)
+                for j in range(m):
+                    mag = math.exp(-gamma[i, j] * dtt)
+                    ang = omega[i, j] * dtt
+                    AR[i * m + j] = mag * math.cos(ang)
+                    AI[i * m + j] = mag * math.sin(ang)
+            last_dt = dtt
         # homogeneous dynamics for every group
-        for i in range(G):
-            for j in range(m):
-                mag = math.exp(-gamma[i, j] * dtt)
-                ang = omega[i, j] * dtt
-                ar, ai = mag * math.cos(ang), mag * math.sin(ang)
-                q = i * M2 + 2 * j
-                hr, hi = h[q], h[q + 1]
-                h[q] = ar * hr - ai * hi
-                h[q + 1] = ar * hi + ai * hr
+        for q2 in range(G * m):
+            ar, ai = AR[q2], AI[q2]
+            q = 2 * q2
+            hr, hi = h[q], h[q + 1]
+            h[q] = ar * hr - ai * hi
+            h[q + 1] = ar * hi + ai * hr
         nw = 0
         if policy == 0:
             for i in range(G):
@@ -115,7 +126,7 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
                     beta[i] = wbar[i] * g[i] * unorm
             base = np.float32(0.0)
             for i in range(G):
-                e[i] = math.exp(-gmin[i] * dtt) * e[i]
+                e[i] = rho_c[i] * e[i]
                 base += c[i] * e[i]
                 contrib[i] = c[i] * beta[i]
                 order[i] = i
