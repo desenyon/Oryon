@@ -113,6 +113,13 @@ Every result reports these separately:
 
 Runtime measurements include the cost of computing beta, the ledger, and selection.
 
+## 5b. Classification agreement (margin condition)
+
+If ||l_T - l~_T||_2 <= B_T for logit vectors, then for any pair (i, j),
+|(l_i - l_j) - (l~_i - l~_j)| <= |d_i| + |d_j| <= sqrt(2) ||d||_2 <= sqrt(2) B_T. Hence the
+approximate top-1 equals the dense top-1 whenever the dense top-1 margin exceeds sqrt(2) B_T.
+Implemented in evaluate.py as `margin_certified_frac` (exact arithmetic; float observed).
+
 ## 6. Claims register
 
 | ID | Claim | Kind | Status |
@@ -126,6 +133,7 @@ Runtime measurements include the cost of computing beta, the ledger, and selecti
 | C7 | Dense reference competitive with simple baseline | measurement | untested (P4/P6) |
 | C8 | Oscillation helps vs independently trained zero-frequency control | measurement | untested (P4/P6) |
 | C9 | Mechanism relationship to prior work | literature | novelty unresolved (P1) |
+| B1 | Certified delta baseline `cdelta`: writes g_i W_i u^_i (cached), ledger beta = |g_i| wbar_i ||u_t - u^_i|| | theorem (exact; same proof as T1 with b - b~ = g W (u - u^)) | implemented, tested (D006) |
 
 ## 7. Acceptance protocol (frozen v1.0 targets; see CODEX_RESEARCH_PLAN.md §7 P6)
 

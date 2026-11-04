@@ -36,6 +36,7 @@ class ForwardResult:
     bounds: Tensor | None  # [batch, time]
     evaluated_writes: Tensor  # [batch, time] number of group projections evaluated
     numerical_status: str
+    selected_writes: Tensor | None = None  # [batch, time] writes the policy chose (masked_ref evaluates all G)
 
 
 def complex_scan(ar: Tensor, ai: Tensor, br: Tensor, bi: Tensor) -> tuple[Tensor, Tensor]:
@@ -163,7 +164,7 @@ class OscillatorSSM(nn.Module):
         hr = x.new_zeros(B, G, m)
         hi = x.new_zeros(B, G, m)
         e = x.new_zeros(B, G)
-        ys, bs, evs = [], [], []
+        ys, bs, evs, sels = [], [], [], []
         u_cache = None
         b_cache = None
         status = "exact-arithmetic bound; float observed only" if policy in ("certified", "oracle", "cdelta") else "no bound"
@@ -202,6 +203,7 @@ class OscillatorSSM(nn.Module):
             else:
                 raise ValueError(policy)
             keep = ~om
+            sels.append(keep.sum(-1))
             if policy == "cdelta":
                 if mode == "masked_ref":
                     full = torch.einsum("gkd,bd->bgk", self.W, u)
@@ -247,4 +249,4 @@ class OscillatorSSM(nn.Module):
                 bs.append(output_bound(e, c))
         y = torch.stack(ys, 1)
         bounds = torch.stack(bs, 1) if bs else None
-        return ForwardResult(y, bounds, torch.stack(evs, 1), status)
+        return ForwardResult(y, bounds, torch.stack(evs, 1), status, torch.stack(sels, 1))

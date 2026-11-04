@@ -1,0 +1,19 @@
+# P5 policy sweep on VALIDATION (never test). Set model_run to a finished p4 run directory.
+# Tolerance grids are in declared output units: multiples of ||train target RMS|| (resonator)
+# or logit units (recall). Quality tolerances preregistered from SPEC §7 (pilot).
+hypothesis: H001
+model_run: runs/REPLACE_ME
+n_val: 200
+seed: 11
+threads: 4
+tol_rel_rmse: 0.02
+tol_acc_pp: 0.5
+policies:
+  - {name: certified, grid: [0.0, 0.01, 0.03, 0.1, 0.3, 1.0, 3.0]}
+  - {name: cdelta,    grid: [0.0, 0.01, 0.03, 0.1, 0.3, 1.0, 3.0]}
+  - {name: oracle,    grid: [0.01, 0.03, 0.1, 0.3, 1.0, 3.0]}
+  - {name: threshold, grid: [0.003, 0.01, 0.03, 0.1, 0.3, 1.0]}
+  - {name: delta,     grid: [0.01, 0.03, 0.1, 0.3, 1.0, 3.0]}
+time_ops: true
+n_time_seqs: 20
+timing_reps: 40
