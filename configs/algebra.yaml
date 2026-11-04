@@ -1,0 +1,17 @@
+# P2 independent new check of T1 (state/output bound) and L1 (budget) — SPEC §3–4.
+# Dimensions follow the historical review description (8 groups x 4 complex modes, 256 steps,
+# 1,000 systems); that review's script was not supplied, so this is a new check.
+seed: 20261104
+n_systems: 1000
+steps: 256
+groups: 8
+modes: 4
+outputs: 3
+input_dims: [4, 16, 64]
+undamped_frac: 0.25      # fraction of fully undamped groups; same fraction mixed (one undamped mode)
+eps_frac_min: 0.01       # epsilon = frac * mean(c_i beta_i) per system, log-uniform
+eps_frac_max: 300.0
+eps_zero_prob: 0.05
+tol: 1.0e-10             # test tolerance, relative to max(1, max |h|); NOT a certificate
+float32_every: 10        # run the float32 torch real-pair path on ~1/10 of systems (raw excesses only)
+modes_run: [policy, random_mask]
