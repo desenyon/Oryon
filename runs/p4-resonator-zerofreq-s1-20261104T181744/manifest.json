@@ -6,7 +6,7 @@
   "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=zerofreq seed=1",
   "cwd": "/Users/desenyon/Developer/Oryon",
   "start_utc": "2026-11-04T18:17:44Z",
-  "status": "running",
+  "status": "passed",
   "git_commit": "2048b31a2331cb105a5cfe3d232f0e8ec69f4e43",
   "git_dirty": true,
   "source_patch_sha256": "24f5ddc3f05487be03dc4b2359467c96d0b1e8eaa1c51b0631b6e4e5ec9d9df5",
@@ -50,5 +50,16 @@
     "device": "cpu",
     "mps_available": true
   },
-  "pid": 82174
+  "pid": 82174,
+  "end_utc": "2026-11-04T18:26:10Z",
+  "wall_s": 505.55,
+  "device_hours": 0.1404,
+  "artifacts_sha256": {
+    "best.pt": "111e62c8494ebbef0321c8a8dbdf00af41e7ffa5d7ef00ae51357b16b1241481",
+    "last.pt": "da5785079caf53a358cd9d490befe049a57f00493ac88ea1b2d7c147571833f1",
+    "log.txt": "4137666d6e7295adfda432f25756ca6cfc057cbfddea39091768fbf0fd06b226",
+    "metrics.json": "569f039df590e23ab3ae69872dfc8789b1554d799ebeb8e692233c95c39afb4d",
+    "source.patch": "24f5ddc3f05487be03dc4b2359467c96d0b1e8eaa1c51b0631b6e4e5ec9d9df5"
+  },
+  "key_result": "resonator/zerofreq/s1: best val nrmse 0.9775 @ 1500; params 152523"
 }

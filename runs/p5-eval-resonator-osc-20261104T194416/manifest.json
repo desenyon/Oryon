@@ -1,0 +1,160 @@
+{
+  "run_id": "p5-eval-resonator-osc-20261104T194416",
+  "hypothesis": "H001/H001b",
+  "plan_rev": "R4",
+  "purpose": "policy sweep on validation for runs/p4-resonator-osc-s0-20261104T172656",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval_v2.yaml --set model_run=runs/p4-resonator-osc-s0-20261104T172656",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T19:44:16Z",
+  "status": "passed",
+  "git_commit": "ce35a76609fff60f151abacd8768fe673374d57e",
+  "git_dirty": true,
+  "source_patch_sha256": "eb978bbec0241044c4ddeb1842e5f82e1009b11f1c76bde6b0cf9087f0f95e77",
+  "untracked_src_sha256": {},
+  "config": {
+    "hypothesis": "H001/H001b",
+    "model_run": "runs/p4-resonator-osc-s0-20261104T172656",
+    "n_val": 200,
+    "seed": 11,
+    "threads": 4,
+    "tol_rel_rmse": 0.02,
+    "tol_acc_pp": 0.5,
+    "policies": [
+      {
+        "name": "certified",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0,
+          1000.0,
+          3000.0
+        ]
+      },
+      {
+        "name": "certified_pm",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0,
+          1000.0,
+          3000.0
+        ]
+      },
+      {
+        "name": "cdelta",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0,
+          1000.0
+        ]
+      },
+      {
+        "name": "cdelta_pm",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0,
+          1000.0
+        ]
+      },
+      {
+        "name": "oracle",
+        "grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0,
+          100.0,
+          1000.0
+        ]
+      },
+      {
+        "name": "threshold",
+        "grid": [
+          0.003,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0
+        ]
+      },
+      {
+        "name": "delta",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0
+        ]
+      }
+    ],
+    "input_noise": 0.0,
+    "time_ops": true,
+    "timing_protocol": "A2",
+    "n_time_seqs": 40,
+    "timing_reps": 5,
+    "model_manifest_sha": "eb938374fc84b14ca226c7e19fa0620fc3f0153b6975d7dc5613a8fcf3540fc5"
+  },
+  "config_sha256": "b43b7ebe600714265bba132fad1e831548f291fc11f6a7d5d9a02fc6060306da",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 84605,
+  "end_utc": "2026-11-04T19:44:54Z",
+  "wall_s": 37.95,
+  "device_hours": 0.0105,
+  "artifacts_sha256": {
+    "log.txt": "3f43552d14a63fcc956c9d59eb11d90f60a86dba43f2c8c41025574da4907996",
+    "metrics.json": "ed4ac54387b460eeb7ce29f3cc98c8fb49a33171e28f6264d5a4d6a87b0c373b",
+    "source.patch": "eb978bbec0241044c4ddeb1842e5f82e1009b11f1c76bde6b0cf9087f0f95e77"
+  },
+  "key_result": "resonator/osc: dense {'nrmse': 0.00548946438357234}; op write_frac certified=1.000, certified_pm=1.000, cdelta=0.165, cdelta_pm=0.165, oracle=1.000, threshold=1.000, delta=0.164; speedups {'certified': 0.883335208158686, 'certified_pm': 0.8649904250718722, 'cdelta': 1.1888788592882944, 'cdelta_pm': 1.1207068526557067, 'threshold': 0.8834294955218589, 'delta': 1.4224524099180091}"
+}

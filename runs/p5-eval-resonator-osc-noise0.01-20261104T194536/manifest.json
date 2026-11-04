@@ -1,0 +1,160 @@
+{
+  "run_id": "p5-eval-resonator-osc-noise0.01-20261104T194536",
+  "hypothesis": "H001/H001b",
+  "plan_rev": "R4",
+  "purpose": "policy sweep on validation for runs/p4-resonator-osc-s0-20261104T172656",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval_v2.yaml --set model_run=runs/p4-resonator-osc-s0-20261104T172656 input_noise=0.01",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T19:45:36Z",
+  "status": "passed",
+  "git_commit": "994b20a98c339559faddd85c7d17f51eaa9e3095",
+  "git_dirty": true,
+  "source_patch_sha256": "4c6a136bdab674235385b4c4b18ea430ca361a29523c21fd8ead73b7ac042060",
+  "untracked_src_sha256": {},
+  "config": {
+    "hypothesis": "H001/H001b",
+    "model_run": "runs/p4-resonator-osc-s0-20261104T172656",
+    "n_val": 200,
+    "seed": 11,
+    "threads": 4,
+    "tol_rel_rmse": 0.02,
+    "tol_acc_pp": 0.5,
+    "policies": [
+      {
+        "name": "certified",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0,
+          1000.0,
+          3000.0
+        ]
+      },
+      {
+        "name": "certified_pm",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0,
+          1000.0,
+          3000.0
+        ]
+      },
+      {
+        "name": "cdelta",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0,
+          1000.0
+        ]
+      },
+      {
+        "name": "cdelta_pm",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0,
+          1000.0
+        ]
+      },
+      {
+        "name": "oracle",
+        "grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0,
+          100.0,
+          1000.0
+        ]
+      },
+      {
+        "name": "threshold",
+        "grid": [
+          0.003,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0
+        ]
+      },
+      {
+        "name": "delta",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0
+        ]
+      }
+    ],
+    "input_noise": 0.01,
+    "time_ops": true,
+    "timing_protocol": "A2",
+    "n_time_seqs": 40,
+    "timing_reps": 5,
+    "model_manifest_sha": "eb938374fc84b14ca226c7e19fa0620fc3f0153b6975d7dc5613a8fcf3540fc5"
+  },
+  "config_sha256": "081e441d4dfdab94d8762e1fb3a30a3784c095555edf8266d760ca1e51ccee39",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 84717,
+  "end_utc": "2026-11-04T19:46:13Z",
+  "wall_s": 37.5,
+  "device_hours": 0.0104,
+  "artifacts_sha256": {
+    "log.txt": "21fde125c7ee04f379596a5213cd868a357ac0817bb02e4835243a1c136f83e7",
+    "metrics.json": "05012c35940085bdb0911c99e999db718aee85415433c52bfe4e0054526f746d",
+    "source.patch": "4c6a136bdab674235385b4c4b18ea430ca361a29523c21fd8ead73b7ac042060"
+  },
+  "key_result": "resonator/osc: dense {'nrmse': 0.05602974072098732}; op write_frac certified=0.993, certified_pm=0.965, cdelta=0.904, cdelta_pm=0.859, oracle=0.983, threshold=1.000, delta=0.827; speedups {'certified': 0.8861721009420698, 'certified_pm': 0.872515127049021, 'cdelta': 0.7819744434342696, 'cdelta_pm': 0.7665045908359028, 'threshold': 0.8831657657416685, 'delta': 0.927405792762715}"
+}

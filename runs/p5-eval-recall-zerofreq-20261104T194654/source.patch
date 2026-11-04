@@ -1,0 +1,74 @@
+diff --git a/experiments/index.csv b/experiments/index.csv
+index 9fa03a3..f6ce860 100644
+--- a/experiments/index.csv
++++ b/experiments/index.csv
+@@ -26,3 +26,20 @@ p5-eval-resonator-osc-noise0.05-20261104T180640,H001,R3,policy sweep on validati
+ p5-eval-recall-zerofreq-noise0.05-20261104T180656,H001,R3,policy sweep on validation for runs/p4-recall-zerofreq-s0-20261104T175412,python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval.yaml --set model_run=runs/p4-recall-zerofreq-s0-20261104T175412 input_noise=0.05,passed,2026-11-04T18:06:56Z,2026-11-04T18:07:10Z,13.88,cpu,0.0039,runs/p5-eval-recall-zerofreq-noise0.05-20261104T180656,"recall/zerofreq: dense {'acc': 0.13500000536441803}; op write_frac certified=0.988, cdelta=0.988, oracle=0.977, threshold=0.985, delta=0.998; speedups {'certified': 0.9087278396885733, 'cdelta': 0.8106051541861189, 'threshold': 0.9098234100542354, 'delta': 0.8837527960410451}"
+ p5-eval-recall-osc-20261104T180712,H001,R3,policy sweep on validation for runs/p4-recall-osc-s0-20261104T174529,python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval.yaml --set model_run=runs/p4-recall-osc-s0-20261104T174529 time_ops=false,passed,2026-11-04T18:07:12Z,2026-11-04T18:07:23Z,11.53,cpu,0.0032,runs/p5-eval-recall-osc-20261104T180712,"recall/osc: dense {'acc': 0.07500000298023224}; op write_frac certified=0.987, cdelta=0.009, oracle=0.965, threshold=0.987, delta=0.036; speedups {}"
+ p4-resonator-osc-s1-20261104T180858,H001,R3,dense pilot training: resonator / osc,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=osc seed=1,passed,2026-11-04T18:08:58Z,2026-11-04T18:17:39Z,520.45,cpu,0.1446,runs/p4-resonator-osc-s1-20261104T180858,resonator/osc/s1: best val nrmse 0.0060 @ 1500; params 152779
++p4-resonator-zerofreq-s1-20261104T181744,H001,R4,dense pilot training: resonator / zerofreq,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=zerofreq seed=1,passed,2026-11-04T18:17:44Z,2026-11-04T18:26:10Z,505.55,cpu,0.1404,runs/p4-resonator-zerofreq-s1-20261104T181744,resonator/zerofreq/s1: best val nrmse 0.9775 @ 1500; params 152523
++p4-resonator-gru-s1-20261104T182616,H001,R4,dense pilot training: resonator / gru,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=gru seed=1,passed,2026-11-04T18:26:16Z,2026-11-04T18:28:40Z,144.74,cpu,0.0402,runs/p4-resonator-gru-s1-20261104T182616,resonator/gru/s1: best val nrmse 0.1773 @ 1500; params 155253
++p4-recall-osc-s1-20261104T182844,H001,R4,dense pilot training: recall / osc,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=recall model=osc seed=1,interrupted,2026-11-04T18:28:44Z,2026-11-04T18:53:44Z,1500.19,cpu,0.4167,runs/p4-recall-osc-s1-20261104T182844,interrupted at step 1250
++p4-recall-zerofreq-s1-20261104T185349,H001,R4,dense pilot training: recall / zerofreq,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=recall model=zerofreq seed=1,passed,2026-11-04T18:53:49Z,2026-11-04T19:02:21Z,511.97,cpu,0.1422,runs/p4-recall-zerofreq-s1-20261104T185349,recall/zerofreq/s1: best val acc 1.0000 @ 250; params 156880
++p4-recall-gru-s1-20261104T190225,H001,R4,dense pilot training: recall / gru,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=recall model=gru seed=1,passed,2026-11-04T19:02:25Z,2026-11-04T19:05:41Z,195.83,cpu,0.0544,runs/p4-recall-gru-s1-20261104T190225,recall/gru/s1: best val acc 0.1260 @ 1000; params 161783
++p4-resonator-osc-s2-20261104T190547,H001,R4,dense pilot training: resonator / osc,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=osc seed=2,passed,2026-11-04T19:05:47Z,2026-11-04T19:13:42Z,475.71,cpu,0.1321,runs/p4-resonator-osc-s2-20261104T190547,resonator/osc/s2: best val nrmse 0.0058 @ 1500; params 152779
++p4-resonator-zerofreq-s2-20261104T191348,H001,R4,dense pilot training: resonator / zerofreq,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=zerofreq seed=2,passed,2026-11-04T19:13:48Z,2026-11-04T19:21:36Z,467.95,cpu,0.13,runs/p4-resonator-zerofreq-s2-20261104T191348,resonator/zerofreq/s2: best val nrmse 0.9777 @ 1500; params 152523
++p4-resonator-gru-s2-20261104T192142,H001,R4,dense pilot training: resonator / gru,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=gru seed=2,passed,2026-11-04T19:21:42Z,2026-11-04T19:23:58Z,136.04,cpu,0.0378,runs/p4-resonator-gru-s2-20261104T192142,resonator/gru/s2: best val nrmse 0.1643 @ 1500; params 155253
++p4-recall-osc-s2-20261104T192401,H001,R4,dense pilot training: recall / osc,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=recall model=osc seed=2,passed,2026-11-04T19:24:01Z,2026-11-04T19:31:51Z,469.67,cpu,0.1305,runs/p4-recall-osc-s2-20261104T192401,recall/osc/s2: best val acc 0.1500 @ 1250; params 157136
++p4-recall-zerofreq-s2-20261104T193155,H001,R4,dense pilot training: recall / zerofreq,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=recall model=zerofreq seed=2,passed,2026-11-04T19:31:55Z,2026-11-04T19:39:36Z,460.96,cpu,0.128,runs/p4-recall-zerofreq-s2-20261104T193155,recall/zerofreq/s2: best val acc 1.0000 @ 250; params 156880
++p4-recall-gru-s2-20261104T193939,H001,R4,dense pilot training: recall / gru,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=recall model=gru seed=2,passed,2026-11-04T19:39:39Z,2026-11-04T19:41:56Z,136.94,cpu,0.038,runs/p4-recall-gru-s2-20261104T193939,recall/gru/s2: best val acc 0.1240 @ 250; params 161783
++p5-eval-resonator-osc-20261104T194223,H001/H001b,R4,policy sweep on validation for runs/p4-resonator-osc-s0-20261104T172656,"python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval_v2.yaml --set model_run=runs/p4-resonator-osc-s0-20261104T172656 n_val=16 n_time_seqs=4 timing_reps=1 policies=[{name: certified_pm, grid: [0.0, 1.0]}, {name: cdelta_pm, grid: [0.0, 1.0]}, {name: delta, grid: [0.0]}]",passed,2026-11-04T19:42:24Z,2026-11-04T19:42:26Z,2.4,cpu,0.0007,runs/p5-eval-resonator-osc-20261104T194223,"resonator/osc: dense {'nrmse': 0.006029279436916113}; op write_frac certified_pm=1.000, cdelta_pm=0.177, delta=0.177; speedups {'certified_pm': 0.8550234301563601, 'cdelta_pm': 1.1309783194181777, 'delta': 1.422758463640738}"
++p4-recall-osc-s1-20261104T182844,H001,R4,dense pilot training: recall / osc,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=recall model=osc seed=1,passed,2026-11-04T18:28:44Z,2026-11-04T19:43:37Z,1540.43,cpu,0.4279,runs/p4-recall-osc-s1-20261104T182844,recall/osc/s1: best val acc 0.1440 @ 500; params 157136
++p5-eval-resonator-osc-20261104T194416,H001/H001b,R4,policy sweep on validation for runs/p4-resonator-osc-s0-20261104T172656,python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval_v2.yaml --set model_run=runs/p4-resonator-osc-s0-20261104T172656,passed,2026-11-04T19:44:16Z,2026-11-04T19:44:54Z,37.95,cpu,0.0105,runs/p5-eval-resonator-osc-20261104T194416,"resonator/osc: dense {'nrmse': 0.00548946438357234}; op write_frac certified=1.000, certified_pm=1.000, cdelta=0.165, cdelta_pm=0.165, oracle=1.000, threshold=1.000, delta=0.164; speedups {'certified': 0.883335208158686, 'certified_pm': 0.8649904250718722, 'cdelta': 1.1888788592882944, 'cdelta_pm': 1.1207068526557067, 'threshold': 0.8834294955218589, 'delta': 1.4224524099180091}"
++p5-eval-recall-zerofreq-20261104T194456,H001/H001b,R4,policy sweep on validation for runs/p4-recall-zerofreq-s0-20261104T175412,python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval_v2.yaml --set model_run=runs/p4-recall-zerofreq-s0-20261104T175412,passed,2026-11-04T19:44:56Z,2026-11-04T19:45:34Z,37.91,cpu,0.0105,runs/p5-eval-recall-zerofreq-20261104T194456,"recall/zerofreq: dense {'acc': 1.0}; op write_frac certified=0.538, certified_pm=0.216, cdelta=0.004, cdelta_pm=0.004, oracle=0.090, threshold=0.989, delta=0.036; speedups {'certified': 1.0674937010953454, 'certified_pm': 1.1580190221484934, 'cdelta': 1.2097366258684932, 'cdelta_pm': 1.1559110767664402, 'threshold': 0.9274033907499526, 'delta': 1.3554591097783153}"
++p5-eval-resonator-osc-noise0.01-20261104T194536,H001/H001b,R4,policy sweep on validation for runs/p4-resonator-osc-s0-20261104T172656,python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval_v2.yaml --set model_run=runs/p4-resonator-osc-s0-20261104T172656 input_noise=0.01,passed,2026-11-04T19:45:36Z,2026-11-04T19:46:13Z,37.5,cpu,0.0104,runs/p5-eval-resonator-osc-noise0.01-20261104T194536,"resonator/osc: dense {'nrmse': 0.05602974072098732}; op write_frac certified=0.993, certified_pm=0.965, cdelta=0.904, cdelta_pm=0.859, oracle=0.983, threshold=1.000, delta=0.827; speedups {'certified': 0.8861721009420698, 'certified_pm': 0.872515127049021, 'cdelta': 0.7819744434342696, 'cdelta_pm': 0.7665045908359028, 'threshold': 0.8831657657416685, 'delta': 0.927405792762715}"
++p5-eval-resonator-osc-20261104T194615,H001/H001b,R4,policy sweep on validation for runs/p4-resonator-osc-s1-20261104T180858,python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval_v2.yaml --set model_run=runs/p4-resonator-osc-s1-20261104T180858,passed,2026-11-04T19:46:15Z,2026-11-04T19:46:52Z,36.8,cpu,0.0102,runs/p5-eval-resonator-osc-20261104T194615,"resonator/osc: dense {'nrmse': 0.006109756417572498}; op write_frac certified=1.000, certified_pm=1.000, cdelta=0.166, cdelta_pm=0.165, oracle=1.000, threshold=1.000, delta=0.164; speedups {'certified': 0.882476418094556, 'certified_pm': 0.8642918501686868, 'cdelta': 1.18292953739293, 'cdelta_pm': 1.1183897344561442, 'threshold': 0.8819489157473736, 'delta': 1.4284164311525702}"
+diff --git a/runs/p4-resonator-zerofreq-s1-20261104T181744/best.pt b/runs/p4-resonator-zerofreq-s1-20261104T181744/best.pt
+index 4a15db8..e832deb 100644
+Binary files a/runs/p4-resonator-zerofreq-s1-20261104T181744/best.pt and b/runs/p4-resonator-zerofreq-s1-20261104T181744/best.pt differ
+diff --git a/runs/p4-resonator-zerofreq-s1-20261104T181744/last.pt b/runs/p4-resonator-zerofreq-s1-20261104T181744/last.pt
+index 8f18b66..a81a832 100644
+Binary files a/runs/p4-resonator-zerofreq-s1-20261104T181744/last.pt and b/runs/p4-resonator-zerofreq-s1-20261104T181744/last.pt differ
+diff --git a/runs/p4-resonator-zerofreq-s1-20261104T181744/log.txt b/runs/p4-resonator-zerofreq-s1-20261104T181744/log.txt
+index 82698f0..041d05e 100644
+--- a/runs/p4-resonator-zerofreq-s1-20261104T181744/log.txt
++++ b/runs/p4-resonator-zerofreq-s1-20261104T181744/log.txt
+@@ -3,3 +3,6 @@
+ [2026-11-04T18:20:41Z] step 500 loss 0.9498 val {'nrmse': 0.9833512839651773} best {'nrmse': 0.9833512839651773, 'step': 500}
+ [2026-11-04T18:22:04Z] step 750 loss 0.9442 val {'nrmse': 0.980564682524078} best {'nrmse': 0.980564682524078, 'step': 750}
+ [2026-11-04T18:23:22Z] step 1000 loss 0.9772 val {'nrmse': 0.9784502726705009} best {'nrmse': 0.9784502726705009, 'step': 1000}
++[2026-11-04T18:24:42Z] step 1250 loss 1.0647 val {'nrmse': 0.9778862280110089} best {'nrmse': 0.9778862280110089, 'step': 1250}
++[2026-11-04T18:26:07Z] step 1500 loss 1.0294 val {'nrmse': 0.9775491393720922} best {'nrmse': 0.9775491393720922, 'step': 1500}
++[2026-11-04T18:26:10Z] resonator/zerofreq/s1: best val nrmse 0.9775 @ 1500; params 152523
+diff --git a/runs/p4-resonator-zerofreq-s1-20261104T181744/manifest.json b/runs/p4-resonator-zerofreq-s1-20261104T181744/manifest.json
+index e7034ae..e3e9ac0 100644
+--- a/runs/p4-resonator-zerofreq-s1-20261104T181744/manifest.json
++++ b/runs/p4-resonator-zerofreq-s1-20261104T181744/manifest.json
+@@ -6,7 +6,7 @@
+   "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=zerofreq seed=1",
+   "cwd": "/Users/desenyon/Developer/Oryon",
+   "start_utc": "2026-11-04T18:17:44Z",
+-  "status": "running",
++  "status": "passed",
+   "git_commit": "2048b31a2331cb105a5cfe3d232f0e8ec69f4e43",
+   "git_dirty": true,
+   "source_patch_sha256": "24f5ddc3f05487be03dc4b2359467c96d0b1e8eaa1c51b0631b6e4e5ec9d9df5",
+@@ -50,5 +50,16 @@
+     "device": "cpu",
+     "mps_available": true
+   },
+-  "pid": 82174
++  "pid": 82174,
++  "end_utc": "2026-11-04T18:26:10Z",
++  "wall_s": 505.55,
++  "device_hours": 0.1404,
++  "artifacts_sha256": {
++    "best.pt": "111e62c8494ebbef0321c8a8dbdf00af41e7ffa5d7ef00ae51357b16b1241481",
++    "last.pt": "da5785079caf53a358cd9d490befe049a57f00493ac88ea1b2d7c147571833f1",
++    "log.txt": "4137666d6e7295adfda432f25756ca6cfc057cbfddea39091768fbf0fd06b226",
++    "metrics.json": "569f039df590e23ab3ae69872dfc8789b1554d799ebeb8e692233c95c39afb4d",
++    "source.patch": "24f5ddc3f05487be03dc4b2359467c96d0b1e8eaa1c51b0631b6e4e5ec9d9df5"
++  },
++  "key_result": "resonator/zerofreq/s1: best val nrmse 0.9775 @ 1500; params 152523"
+ }
+\ No newline at end of file

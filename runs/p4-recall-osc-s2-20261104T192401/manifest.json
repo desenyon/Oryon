@@ -1,0 +1,65 @@
+{
+  "run_id": "p4-recall-osc-s2-20261104T192401",
+  "hypothesis": "H001",
+  "plan_rev": "R4",
+  "purpose": "dense pilot training: recall / osc",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=recall model=osc seed=2",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T19:24:01Z",
+  "status": "passed",
+  "git_commit": "356c5edd5d72f501f33310e6caf64faa6b7945ba",
+  "git_dirty": true,
+  "source_patch_sha256": "28191f9a5250484fab3ad702e9e43ffcc875a64c48ea6bd80ed4314c0bf06d5f",
+  "untracked_src_sha256": {},
+  "config": {
+    "task": "recall",
+    "model": "osc",
+    "seed": 2,
+    "n_train": 4000,
+    "n_val": 500,
+    "steps": 1500,
+    "batch_size": 32,
+    "lr": 0.003,
+    "weight_decay": 0.0,
+    "clip": 1.0,
+    "eval_every": 250,
+    "max_minutes": 25,
+    "threads": 4,
+    "model_cfg": {
+      "groups": 8,
+      "modes": 32,
+      "d_model": 256,
+      "d_hidden": 64,
+      "omega_max": 3.0,
+      "gamma_init": [
+        0.005,
+        0.5
+      ]
+    },
+    "gru_hidden": 225
+  },
+  "config_sha256": "02ec6ee33e03192fbd13bd037de80da08cba958bbc82b46350ba25a6df8f820b",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 83976,
+  "end_utc": "2026-11-04T19:31:51Z",
+  "wall_s": 469.67,
+  "device_hours": 0.1305,
+  "artifacts_sha256": {
+    "best.pt": "a315b86620faa859456a4130eac2d0982ea2cb28e180a786f3a652d3e7185afa",
+    "last.pt": "7fca00ca15619297d51228e30f804bac2d0d7feee58bfda0d7c6316898e83e15",
+    "log.txt": "cded359c1411f678d79bdd4a9a296b29b6d2e027f5cb73790dd05ae1e73476ce",
+    "metrics.json": "9a33d33a791986f147dff1f4d2f2f9e56019af6c7f8d47849220ead8cb1a4f7e",
+    "source.patch": "28191f9a5250484fab3ad702e9e43ffcc875a64c48ea6bd80ed4314c0bf06d5f"
+  },
+  "key_result": "recall/osc/s2: best val acc 0.1500 @ 1250; params 157136"
+}

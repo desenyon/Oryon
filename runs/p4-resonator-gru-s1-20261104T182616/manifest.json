@@ -1,0 +1,65 @@
+{
+  "run_id": "p4-resonator-gru-s1-20261104T182616",
+  "hypothesis": "H001",
+  "plan_rev": "R4",
+  "purpose": "dense pilot training: resonator / gru",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=gru seed=1",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T18:26:16Z",
+  "status": "passed",
+  "git_commit": "356c5edd5d72f501f33310e6caf64faa6b7945ba",
+  "git_dirty": true,
+  "source_patch_sha256": "751f1e1523c13cbb83472b4ad25c1a16251d3b28e539ecd5384115d17b153739",
+  "untracked_src_sha256": {},
+  "config": {
+    "task": "resonator",
+    "model": "gru",
+    "seed": 1,
+    "n_train": 4000,
+    "n_val": 500,
+    "steps": 1500,
+    "batch_size": 32,
+    "lr": 0.003,
+    "weight_decay": 0.0,
+    "clip": 1.0,
+    "eval_every": 250,
+    "max_minutes": 25,
+    "threads": 4,
+    "model_cfg": {
+      "groups": 8,
+      "modes": 32,
+      "d_model": 256,
+      "d_hidden": 64,
+      "omega_max": 3.0,
+      "gamma_init": [
+        0.005,
+        0.5
+      ]
+    },
+    "gru_hidden": 225
+  },
+  "config_sha256": "37eac1d90d513ab97c0424336e30a13ff934cff70455f07b162df859be3f5b5e",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 82618,
+  "end_utc": "2026-11-04T18:28:40Z",
+  "wall_s": 144.74,
+  "device_hours": 0.0402,
+  "artifacts_sha256": {
+    "best.pt": "5ad7acad41a3760581caefd4c87cd77fc4788d7d44e47950339c2114d4be148c",
+    "last.pt": "7f56188a854254853f12be95d23fb235c6021f7caa8e22417c9e10bd33a17991",
+    "log.txt": "3e0c8a7754a21dd8a26f010b3bfc65ba0036c6131b7f23d42ce5a797043c5efc",
+    "metrics.json": "c811dbbd5731f4dbfc5e92d241814ef342a4326d62dfbf21ec776f510a25043f",
+    "source.patch": "751f1e1523c13cbb83472b4ad25c1a16251d3b28e539ecd5384115d17b153739"
+  },
+  "key_result": "resonator/gru/s1: best val nrmse 0.1773 @ 1500; params 155253"
+}

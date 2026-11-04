@@ -1,0 +1,39 @@
+{
+  "run_id": "p4-aggregate-20261104T195054",
+  "hypothesis": "H001",
+  "plan_rev": "R4",
+  "purpose": "aggregate pilot seeds: C7 baseline and C8 oscillator vs zero-frequency",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/aggregate.py",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T19:50:54Z",
+  "status": "passed",
+  "git_commit": "994b20a98c339559faddd85c7d17f51eaa9e3095",
+  "git_dirty": true,
+  "source_patch_sha256": "1cfbe6f78b2386e08afaad930b7c6db84cb8b419f982117a5d2e96f83ac0ce54",
+  "untracked_src_sha256": {},
+  "config": {
+    "source": "runs/p4-*"
+  },
+  "config_sha256": "ec8586186b4368f21d41bfcb0669ce735e072f2d6a90c2a925427aa675a84e04",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 84908,
+  "end_utc": "2026-11-04T19:50:55Z",
+  "wall_s": 1.25,
+  "device_hours": 0.0003,
+  "artifacts_sha256": {
+    "log.txt": "c7bbd668869666e7a5687675b984e6ee0967530e03cb5e8e136b50891cd638af",
+    "metrics.json": "74cbeb7f8faca7e044aaa4d9aaf73578439bcf79f4efa89e40cd883224ae2521",
+    "source.patch": "1cfbe6f78b2386e08afaad930b7c6db84cb8b419f982117a5d2e96f83ac0ce54"
+  },
+  "key_result": "recall: gru 0.1313\u00b10.0110 (n=3), osc 0.1427\u00b10.0081 (n=3), zerofreq 1.0000\u00b10.0000 (n=3); resonator: gru 0.1543\u00b10.0294 (n=3), osc 0.0057\u00b10.0003 (n=3), zerofreq 0.9777\u00b10.0001 (n=3)"
+}

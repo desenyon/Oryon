@@ -60,9 +60,9 @@ def main() -> None:
         if "osc" in models and "gru" in models:
             s["osc_minus_gru"] = ci_diff(models["osc"], models["gru"])
         summary[task] = s
-        run.log(f"{task}: " + json.dumps({m: (round(x['mean'], 4), x['sd'] and round(x['sd'], 4), x['n']) for m, x in s.items() if 'mean' in x})
+        run.log(f"{task}: " + json.dumps({m: (round(x['mean'], 4), x['sd'] and round(x['sd'], 4), x['n']) for m, x in s.items() if 'n' in x})
                 + f" | osc-zf {json.dumps(s.get('osc_minus_zerofreq'))}")
-    key = "; ".join(f"{t}: " + ", ".join(f"{m} {x['mean']:.4f}±{(x['sd'] or 0):.4f} (n={x['n']})" for m, x in s.items() if "mean" in x) for t, s in summary.items())
+    key = "; ".join(f"{t}: " + ", ".join(f"{m} {x['mean']:.4f}±{(x['sd'] or 0):.4f} (n={x['n']})" for m, x in s.items() if "n" in x) for t, s in summary.items())  # model entries only (diff dicts have "mean" but no "n")
     run.finalize("passed", summary, key)
 
 

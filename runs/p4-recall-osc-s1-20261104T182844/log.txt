@@ -1,0 +1,11 @@
+[2026-11-04T18:28:44Z] params 157136; d_in 10; d_out 8; train 4000 val 500
+[2026-11-04T18:30:03Z] step 250 loss 2.1306 val {'acc': 0.124, 'ce': 2.192788024902344} best {'acc': 0.124, 'ce': 2.192788024902344, 'step': 250}
+[2026-11-04T18:33:41Z] step 500 loss 2.0591 val {'acc': 0.144, 'ce': 2.091579406738281} best {'acc': 0.144, 'ce': 2.091579406738281, 'step': 500}
+[2026-11-04T18:49:32Z] step 750 loss 2.0158 val {'acc': 0.142, 'ce': 2.0935750427246096} best {'acc': 0.144, 'ce': 2.091579406738281, 'step': 500}
+[2026-11-04T18:51:30Z] step 1000 loss 2.0030 val {'acc': 0.12, 'ce': 2.1039038391113283} best {'acc': 0.144, 'ce': 2.091579406738281, 'step': 500}
+[2026-11-04T18:53:02Z] step 1250 loss 2.0010 val {'acc': 0.118, 'ce': 2.1105299987792967} best {'acc': 0.144, 'ce': 2.091579406738281, 'step': 500}
+[2026-11-04T18:53:44Z] time limit reached at step 1382; checkpoint last.pt; resume with --resume /Users/desenyon/Developer/Oryon/runs/p4-recall-osc-s1-20261104T182844
+[2026-11-04T19:42:57Z] resumed at step 1382
+[2026-11-04T19:42:57Z] params 157136; d_in 10; d_out 8; train 4000 val 500
+[2026-11-04T19:43:34Z] step 1500 loss 1.9968 val {'acc': 0.12, 'ce': 2.1196333923339843} best {'acc': 0.144, 'ce': 2.091579406738281, 'step': 500}
+[2026-11-04T19:43:37Z] recall/osc/s1: best val acc 0.1440 @ 500; params 157136

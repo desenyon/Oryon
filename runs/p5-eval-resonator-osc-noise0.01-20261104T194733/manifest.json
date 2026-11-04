@@ -1,0 +1,160 @@
+{
+  "run_id": "p5-eval-resonator-osc-noise0.01-20261104T194733",
+  "hypothesis": "H001/H001b",
+  "plan_rev": "R4",
+  "purpose": "policy sweep on validation for runs/p4-resonator-osc-s1-20261104T180858",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval_v2.yaml --set model_run=runs/p4-resonator-osc-s1-20261104T180858 input_noise=0.01",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T19:47:33Z",
+  "status": "passed",
+  "git_commit": "994b20a98c339559faddd85c7d17f51eaa9e3095",
+  "git_dirty": true,
+  "source_patch_sha256": "d13e548750ec016fa794b66408be22d60d67a1bd4ebaec43e7b7cce4e185f6fb",
+  "untracked_src_sha256": {},
+  "config": {
+    "hypothesis": "H001/H001b",
+    "model_run": "runs/p4-resonator-osc-s1-20261104T180858",
+    "n_val": 200,
+    "seed": 11,
+    "threads": 4,
+    "tol_rel_rmse": 0.02,
+    "tol_acc_pp": 0.5,
+    "policies": [
+      {
+        "name": "certified",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0,
+          1000.0,
+          3000.0
+        ]
+      },
+      {
+        "name": "certified_pm",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0,
+          1000.0,
+          3000.0
+        ]
+      },
+      {
+        "name": "cdelta",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0,
+          1000.0
+        ]
+      },
+      {
+        "name": "cdelta_pm",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0,
+          1000.0
+        ]
+      },
+      {
+        "name": "oracle",
+        "grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0,
+          100.0,
+          1000.0
+        ]
+      },
+      {
+        "name": "threshold",
+        "grid": [
+          0.003,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0,
+          10.0,
+          30.0
+        ]
+      },
+      {
+        "name": "delta",
+        "grid": [
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          0.3,
+          1.0,
+          3.0
+        ]
+      }
+    ],
+    "input_noise": 0.01,
+    "time_ops": true,
+    "timing_protocol": "A2",
+    "n_time_seqs": 40,
+    "timing_reps": 5,
+    "model_manifest_sha": "b8564282f071455aed71ba9836be4f12b2f90775ef86de084e0e3d68665c90b9"
+  },
+  "config_sha256": "a629a982ba5f866adfe354bf3378b4970dce7bc38fef8c292e3790ec5d08b0dc",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 84762,
+  "end_utc": "2026-11-04T19:48:12Z",
+  "wall_s": 38.68,
+  "device_hours": 0.0107,
+  "artifacts_sha256": {
+    "log.txt": "720eb457a5480cb22121ee79fa7eafaa8769409a2d6d53f02582c2a8e9235ee8",
+    "metrics.json": "270a51cf39b95443f0f77fdc0c4e73522d9e331176e3e6781f8f4c926b8d76fd",
+    "source.patch": "d13e548750ec016fa794b66408be22d60d67a1bd4ebaec43e7b7cce4e185f6fb"
+  },
+  "key_result": "resonator/osc: dense {'nrmse': 0.055951837450265884}; op write_frac certified=0.982, certified_pm=0.990, cdelta=0.905, cdelta_pm=0.838, oracle=0.989, threshold=1.000, delta=0.212; speedups {'certified': 0.8948775302027215, 'certified_pm': 0.8611003036908093, 'cdelta': 0.7792550611111334, 'cdelta_pm': 0.7690401416033114, 'threshold': 0.8852242889287617, 'delta': 1.372674768680095}"
+}
