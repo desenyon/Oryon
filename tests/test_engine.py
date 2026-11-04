@@ -35,3 +35,18 @@ def test_engine_dense(setup):
     y, _, w = eng.run(x[0].numpy(), dt[0].numpy(), policy="dense")
     assert np.allclose(y, m(x, dt).predictions[0].detach().numpy(), atol=1e-4)
     assert (w == m.G).all()
+
+
+@pytest.mark.parametrize("policy,kw", [("dense", {}), ("certified", {"epsilon": 0.0}), ("certified", {"epsilon": 1.0}),
+                                       ("oracle", {"epsilon": 1.0}), ("threshold", {"tau": 3.0}), ("delta", {"tau": 0.5})])
+def test_compiled_engine_matches_numpy_engine(setup, policy, kw):
+    from physics_ml.engine_nb import CompiledEngine
+
+    m, eng, x, dt = setup
+    ce = CompiledEngine(m)
+    y0, b0, w0 = eng.run(x[0].numpy(), dt[0].numpy(), policy=policy, **kw)
+    y1, b1, w1 = ce.run(x[0].numpy(), dt[0].numpy(), policy=policy, **kw)
+    assert np.allclose(y0, y1, atol=1e-4)
+    assert np.array_equal(w0, w1)
+    if b0 is not None:
+        assert np.allclose(b0, b1, rtol=1e-4, atol=1e-6)

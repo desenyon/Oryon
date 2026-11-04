@@ -19,6 +19,7 @@ import numpy as np  # noqa: E402
 import torch  # noqa: E402
 
 from .engine import StreamEngine  # noqa: E402
+from .engine_nb import CompiledEngine  # noqa: E402
 from .model import OscillatorSSM  # noqa: E402
 from .records import Run, load_config  # noqa: E402
 
@@ -64,14 +65,14 @@ def main() -> None:
     args = ap.parse_args()
     cfg = load_config(args.config)
     torch.set_num_threads(1)
-    run = Run("p3-bench", "H001", "profile dense write fraction f, ceiling, controller overhead (untrained weights)", cfg)
+    run = Run(f"p3-bench-{cfg.get('engine', 'numpy')}", "H001", f"profile write fraction f, ceiling, controller overhead; engine={cfg.get('engine', 'numpy')} (untrained weights)", cfg)
     rng = np.random.default_rng(cfg["seed"])
     results = []
     for shp in cfg["shapes"]:
         model = OscillatorSSM(d_in=cfg["d_in"], d_out=cfg["d_out"], d_model=shp["d_model"], d_hidden=shp["d_hidden"],
                               groups=shp["groups"], modes=shp["modes"], seed=0).eval()
         model.freeze_bounds()
-        eng = StreamEngine(model)
+        eng = CompiledEngine(model) if cfg.get("engine", "numpy") == "compiled" else StreamEngine(model)
         data = [bursty_inputs(rng, cfg["steps"], cfg["d_in"], cfg["active_frac"]) for _ in range(4)]
         xs, dts = [d[0] for d in data], [d[1] for d in data]
         methods = {

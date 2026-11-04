@@ -1,5 +1,6 @@
 # P3 shape profile (untrained weights; timing depends only on shapes and policy branch).
 # Regime: batch-one streaming, float32, 1 BLAS thread, NumPy StreamEngine.
+engine: numpy
 seed: 7
 d_in: 4
 d_out: 4

@@ -1,0 +1,16 @@
+# P3 shape profile (untrained weights; timing depends only on shapes and policy branch).
+# Regime: batch-one streaming, float32, 1 BLAS thread, numba CompiledEngine.
+engine: compiled
+seed: 7
+d_in: 4
+d_out: 4
+steps: 400
+reps: 30
+active_frac: 0.2
+shapes:
+  - {groups: 8, modes: 8, d_model: 64, d_hidden: 64}
+  - {groups: 8, modes: 16, d_model: 128, d_hidden: 64}
+  - {groups: 8, modes: 32, d_model: 256, d_hidden: 64}
+  - {groups: 8, modes: 64, d_model: 256, d_hidden: 128}
+  - {groups: 16, modes: 32, d_model: 512, d_hidden: 128}
+  - {groups: 4, modes: 64, d_model: 512, d_hidden: 128}
