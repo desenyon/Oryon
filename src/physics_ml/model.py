@@ -14,6 +14,9 @@ Policies (how the mask is chosen in masked_ref / selective):
               write: diagnostic only, never an efficiency result).
   threshold   heuristic: omit when c_i*beta_i < tau (no ledger, bounds None).
   delta       Delta-network-style baseline: cached projection reused unless ||u_t - u_cache|| > tau.
+  certified_pm / cdelta_pm   H001b: same decisions but a per-mode ledger e_ij (|a_ij| decay,
+              closed-form spectral norms of each mode's write block, B_i = min(||C_i|| ||e_i||,
+              sum_j ||C_ij|| e_ij)); SPEC §3c.
   cdelta      CERTIFIED delta baseline (review_1): per-group cached projection W_i u^_i is written
               (times the fresh gate) unless refreshed; ledger with beta = |g| wbar ||u - u^_i||;
               refresh decisions by the same budget policy. "Omitted" = reused cache, not dropped.
@@ -27,7 +30,10 @@ import torch.nn.functional as F
 from torch import Tensor, nn
 
 from .bounds import BoundCache, output_bound, update_error, write_bound
-from .policy import choose_omissions
+from .bounds import group_bounds_modes, update_error_modes
+from .policy import choose_omissions, choose_omissions_modes
+
+CERTIFIED = ("certified", "oracle", "cdelta", "certified_pm", "cdelta_pm")
 
 
 @dataclass
@@ -153,7 +159,7 @@ class OscillatorSSM(nn.Module):
         G, m = self.G, self.m
         cache = self.bounds()
         wbar, c = cache.wbar.to(x.dtype), cache.c.to(x.dtype)
-        if policy in ("certified", "oracle", "cdelta"):
+        if policy in CERTIFIED:
             if epsilon is None:
                 raise ValueError("certified/oracle policy needs epsilon")
             eps = torch.as_tensor(epsilon, dtype=x.dtype).expand(B).clone()
@@ -167,7 +173,10 @@ class OscillatorSSM(nn.Module):
         ys, bs, evs, sels = [], [], [], []
         u_cache = None
         b_cache = None
-        status = "exact-arithmetic bound; float observed only" if policy in ("certified", "oracle", "cdelta") else "no bound"
+        status = "exact-arithmetic bound; float observed only" if policy in CERTIFIED else "no bound"
+        wmode, c_spec, c_mode = (cache.wmode.to(x.dtype), cache.c_spec.to(x.dtype), cache.c_mode.to(x.dtype))
+        e_m = x.new_zeros(B, G, m)  # per-mode ledger (H001b)
+        write_kind = {"cdelta": "cdelta", "cdelta_pm": "cdelta", "delta": "delta"}.get(policy, "omit")
         uh = x.new_zeros(B, G, self.d)  # cdelta per-group cached inputs (u^ = 0 -> plain omission)
         pc = x.new_zeros(B, G, 2 * m)  # cdelta per-group cached projections W_i u^_i
         for t in range(T):
@@ -191,6 +200,17 @@ class OscillatorSSM(nn.Module):
                 if t == 0:
                     om = torch.zeros_like(om)  # no cache yet: compute every write
                 e = update_error(e, rho, beta, om)
+            elif policy in ("certified_pm", "cdelta_pm"):
+                amag = torch.exp(-self.gamma * dt[:, t, None, None])  # [B, G, m]
+                if policy == "certified_pm":
+                    unorm = torch.linalg.vector_norm(u, dim=-1)[:, None].expand(B, G)
+                else:
+                    unorm = torch.linalg.vector_norm(u[:, None] - uh, dim=-1)
+                beta_m = (g.abs() * unorm)[..., None] * wmode[None]
+                om = choose_omissions_modes(e_m, amag, beta_m, c_spec, c_mode, eps)
+                if policy == "cdelta_pm" and t == 0:
+                    om = torch.zeros_like(om)
+                e_m = update_error_modes(e_m, amag, beta_m, om)
             elif policy == "threshold":
                 beta = write_bound(g, wbar, u)
                 om = c[None] * beta < tau
@@ -204,7 +224,7 @@ class OscillatorSSM(nn.Module):
                 raise ValueError(policy)
             keep = ~om
             sels.append(keep.sum(-1))
-            if policy == "cdelta":
+            if write_kind == "cdelta":
                 if mode == "masked_ref":
                     full = torch.einsum("gkd,bd->bgk", self.W, u)
                     pc = torch.where(keep[..., None], full, pc)
@@ -216,7 +236,7 @@ class OscillatorSSM(nn.Module):
                 uh = torch.where(keep[..., None], u[:, None].expand(B, G, self.d), uh)
                 bb = (pc * g[..., None]).view(B, G, m, 2)
                 hr, hi = hr + bb[..., 0], hi + bb[..., 1]
-            elif policy == "delta":
+            elif write_kind == "delta":
                 # recompute projection only when input moved; reuse cached b otherwise (gate fresh)
                 if b_cache is None:
                     b_cache = x.new_zeros(B, G, 2 * m)
@@ -245,7 +265,9 @@ class OscillatorSSM(nn.Module):
                     hi[bi_, gi] += w[:, 1]
             ys.append(self.readout(hr, hi, u))
             evs.append(n_eval)
-            if policy in ("certified", "oracle", "cdelta"):
+            if policy in ("certified_pm", "cdelta_pm"):
+                bs.append(group_bounds_modes(e_m, c_spec, c_mode).sum(-1))
+            elif policy in CERTIFIED:
                 bs.append(output_bound(e, c))
         y = torch.stack(ys, 1)
         bounds = torch.stack(bs, 1) if bs else None

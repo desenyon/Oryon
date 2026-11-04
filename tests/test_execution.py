@@ -98,3 +98,23 @@ def test_negative_dt_and_epsilon_rejected():
         m(x, -dt - 0.1, mode="dense")
     with pytest.raises(ValueError):
         m(x, dt, mode="selective", epsilon=-1.0)
+
+
+@pytest.mark.parametrize("policy", ["certified_pm", "cdelta_pm"])
+def test_per_mode_ledger_bound_holds_float64_and_is_tighter(policy):
+    m = _model().double()
+    m.freeze_bounds()
+    x, dt = _data(B=3, T=80)
+    x, dt = x.double(), dt.double()
+    dense = m(x, dt, mode="dense").predictions
+    base = policy.replace("_pm", "")
+    for eps in [0.0, 0.05, 0.5, 5.0]:
+        r = m(x, dt, mode="masked_ref", policy=policy, epsilon=eps)
+        dev = torch.linalg.vector_norm(r.predictions - dense, dim=-1)
+        assert (dev <= r.bounds + 1e-9).all()
+        assert (r.bounds <= eps + 1e-12).all()
+        r0 = m(x, dt, mode="masked_ref", policy=base, epsilon=eps)
+        assert r.selected_writes.sum() <= r0.selected_writes.sum()  # never needs more writes here
+    sel = m(x[:1].float().double(), dt[:1], mode="selective", policy=policy, epsilon=0.5)
+    ref = m(x[:1], dt[:1], mode="masked_ref", policy=policy, epsilon=0.5)
+    assert torch.allclose(sel.predictions, ref.predictions, atol=1e-9)

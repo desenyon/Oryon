@@ -5,7 +5,7 @@ bounds, ledger, stable selection, oscillator evolution, genuinely selected proje
 is one compiled loop, so timing reflects arithmetic and memory rather than interpreter overhead.
 Kept groups and the dense path use the same Accelerate sgemv kernel (per-group calls). Policies:
 0 dense | 1 nowrite (ceiling only) | 2 certified | 3 threshold | 4 delta | 5 oracle (diagnostic) |
-7 cdelta (certified delta baseline) | 6 dense_fused (one sgemv over all groups: the fastest dense reference, used as speedup denominator).
+7 cdelta (certified delta baseline) | 9 certified_pm, 10 cdelta_pm (H001b per-mode ledger) | 6 dense_fused (one sgemv over all groups: the fastest dense reference, used as speedup denominator).
 """
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ import numpy as np
 
 from .model import OscillatorSSM
 
-POLICIES = {"dense": 0, "nowrite": 1, "certified": 2, "threshold": 3, "delta": 4, "oracle": 5, "dense_fused": 6, "cdelta": 7}
+POLICIES = {"dense": 0, "nowrite": 1, "certified": 2, "threshold": 3, "delta": 4, "oracle": 5, "dense_fused": 6, "cdelta": 7, "certified_pm": 9, "cdelta_pm": 10}
 
 
 import ctypes  # noqa: E402
@@ -39,7 +39,7 @@ def _mv(W, r0, r1, u, out):
 
 
 @nb.njit
-def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamma, omega, gmin, wbar, c,
+def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamma, omega, gmin, wbar, c, wmode, c_spec, c_mode,
          G, m, policy, epsilon, tau, y, bounds, writes):
     T, d_in = x.shape
     H, d = E1.shape[0], E2.shape[0]
@@ -61,6 +61,10 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
     b_cache = np.zeros(G * M2, np.float32)
     have_cache = False
     uh = np.zeros((G, d), np.float32)
+    MAG = np.empty(G * m, np.float32)
+    em = np.zeros((G, m), np.float32)
+    bm = np.zeros((G, m), np.float32)
+    nrm = np.zeros(G, np.float32)
     AR = np.empty(G * m, np.float32)
     AI = np.empty(G * m, np.float32)
     rho_c = np.empty(G, np.float32)
@@ -89,6 +93,7 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
                 rho_c[i] = math.exp(-gmin[i] * dtt)
                 for j in range(m):
                     mag = math.exp(-gamma[i, j] * dtt)
+                    MAG[i * m + j] = mag
                     ang = omega[i, j] * dtt
                     AR[i * m + j] = mag * math.cos(ang)
                     AI[i * m + j] = mag * math.sin(ang)
@@ -113,7 +118,9 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
                 for k in range(M2):
                     h[i * M2 + k] += full[i * M2 + k] * g[i]
             nw = G
-        elif policy == 2 or policy == 5 or policy == 7:
+        elif policy == 2 or policy == 5 or policy == 7 or policy == 9 or policy == 10:
+            pm = policy >= 9
+            cd = policy == 7 or policy == 10
             if policy == 5:
                 for i in range(G):
                     _mv(Wflat, i * M2, (i + 1) * M2, u, buf)
@@ -122,22 +129,46 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
                         full[i * M2 + k] = buf[k] * g[i]
                         s += full[i * M2 + k] * full[i * M2 + k]
                     beta[i] = math.sqrt(s)
-            elif policy == 7:
+            elif cd:
                 for i in range(G):
                     s2 = np.float32(0.0)
                     for k in range(d):
                         dd = u[k] - uh[i, k]
                         s2 += dd * dd
-                    beta[i] = wbar[i] * g[i] * math.sqrt(s2) if t > 0 else np.float32(np.inf)
+                    nrm[i] = math.sqrt(s2) if t > 0 else np.float32(np.inf)
+                    beta[i] = wbar[i] * g[i] * nrm[i]
             else:
                 for i in range(G):
                     beta[i] = wbar[i] * g[i] * unorm
             base = np.float32(0.0)
-            for i in range(G):
-                e[i] = rho_c[i] * e[i]
-                base += c[i] * e[i]
-                contrib[i] = c[i] * beta[i]
-                order[i] = i
+            if pm:
+                for i in range(G):
+                    ni = nrm[i] if cd else unorm
+                    s_old = 0.0
+                    l_old = 0.0
+                    s_new = 0.0
+                    l_new = 0.0
+                    for j in range(m):
+                        dec = MAG[i * m + j] * em[i, j]
+                        em[i, j] = dec
+                        bb_ = g[i] * wmode[i, j] * ni
+                        bm[i, j] = bb_
+                        s_old += dec * dec
+                        l_old += c_mode[i, j] * dec
+                        s_new += (dec + bb_) * (dec + bb_)
+                        l_new += c_mode[i, j] * (dec + bb_)
+                    b_old = min(c_spec[i] * math.sqrt(s_old), l_old)
+                    b_new = min(c_spec[i] * math.sqrt(s_new), l_new)
+                    base += b_old
+                    dlt = b_new - b_old
+                    contrib[i] = dlt if dlt > 0 else 0.0
+                    order[i] = i
+            else:
+                for i in range(G):
+                    e[i] = rho_c[i] * e[i]
+                    base += c[i] * e[i]
+                    contrib[i] = c[i] * beta[i]
+                    order[i] = i
             # stable insertion sort by contrib (G is small)
             for a in range(1, G):
                 key = order[a]
@@ -164,19 +195,23 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
             bsum = np.float32(0.0)
             for i in range(G):
                 if om[i]:
-                    e[i] += beta[i]
-                    if policy == 7:
+                    if pm:
+                        for j in range(m):
+                            em[i, j] += bm[i, j]
+                    else:
+                        e[i] += beta[i]
+                    if cd:
                         for k in range(M2):
                             h[i * M2 + k] += b_cache[i * M2 + k] * g[i]
                 else:
-                    if policy == 7:
+                    if cd:
                         _mv(Wflat, i * M2, (i + 1) * M2, u, buf)
                         for k in range(M2):
                             b_cache[i * M2 + k] = buf[k]
                             h[i * M2 + k] += buf[k] * g[i]
                         for k in range(d):
                             uh[i, k] = u[k]
-                    elif policy == 2:
+                    elif policy == 2 or policy == 9:
                         _mv(Wflat, i * M2, (i + 1) * M2, u, buf)
                         for k in range(M2):
                             h[i * M2 + k] += buf[k] * g[i]
@@ -184,7 +219,15 @@ def _run(x, dt, mean, inv_std, E1, e1, E2, e2, Wg, bg, Wflat, Cflat, D, ob, gamm
                         for k in range(M2):
                             h[i * M2 + k] += full[i * M2 + k]
                     nw += 1
-                bsum += c[i] * e[i]
+                if pm:
+                    s2 = 0.0
+                    l2 = 0.0
+                    for j in range(m):
+                        s2 += em[i, j] * em[i, j]
+                        l2 += c_mode[i, j] * em[i, j]
+                    bsum += min(c_spec[i] * math.sqrt(s2), l2)
+                else:
+                    bsum += c[i] * e[i]
             bounds[t] = bsum
         elif policy == 3:
             for i in range(G):
@@ -228,7 +271,8 @@ class CompiledEngine:
             f(model.x_mean), f(1.0 / model.x_std), f(model.enc1.weight), f(model.enc1.bias), f(model.enc2.weight),
             f(model.enc2.bias), f(model.gate.weight), f(model.gate.bias), f(model.W.reshape(model.G * 2 * model.m, -1)),
             f(model.C.permute(1, 0, 2).reshape(model.p, -1)), f(model.D), f(model.out_bias), f(model.gamma),
-            f(model.omega), f(model.gamma.amin(-1)), f(cache.wbar), f(cache.c),
+            f(model.omega), f(model.gamma.amin(-1)), f(cache.wbar), f(cache.c), f(cache.wmode), f(cache.c_spec),
+            f(cache.c_mode),
         )
 
     def run(self, x: np.ndarray, dt: np.ndarray, policy: str = "dense", epsilon: float = 0.0, tau: float = 0.0):
@@ -239,4 +283,4 @@ class CompiledEngine:
         bounds = np.zeros(T, np.float32)
         writes = np.empty(T, np.int32)
         _run(x, dt, *self.args, self.G, self.m, POLICIES[policy], float(epsilon), float(tau), y, bounds, writes)
-        return y, (bounds if policy in ("certified", "oracle", "cdelta") else None), writes
+        return y, (bounds if policy in ("certified", "oracle", "cdelta", "certified_pm", "cdelta_pm") else None), writes

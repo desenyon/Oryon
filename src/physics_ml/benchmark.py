@@ -113,3 +113,29 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+def time_paired(eng, xs, dts, methods: dict, reps: int, rng) -> dict:
+    """Protocol A2: every DISTINCT sequence is timed under every method `reps` times in randomized
+    order; returns name -> per-sequence median seconds (array over sequences)."""
+    names = list(methods)
+    for k in names:  # warmup
+        eng.run(xs[0], dts[0], **methods[k])
+    per = {k: np.empty((len(xs), reps)) for k in names}
+    for r in range(reps):
+        for i in range(len(xs)):
+            rng.shuffle(names)
+            for k in names:
+                t0 = time.perf_counter()
+                eng.run(xs[i], dts[i], **methods[k])
+                per[k][i, r] = time.perf_counter() - t0
+    return {k: np.median(v, axis=1) for k, v in per.items()}
+
+
+def paired_speedup(den: np.ndarray, num: np.ndarray, rng, n_boot: int = 4000) -> tuple[float, float, float]:
+    """Total-time ratio sum(den)/sum(num) with a paired bootstrap over sequences."""
+    est = float(den.sum() / num.sum())
+    idx = rng.integers(0, len(den), (n_boot, len(den)))
+    boots = den[idx].sum(1) / num[idx].sum(1)
+    lo, hi = np.percentile(boots, [2.5, 97.5])
+    return est, float(lo), float(hi)

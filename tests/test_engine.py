@@ -67,3 +67,15 @@ def test_cdelta_compiled_matches_model_and_bound_holds(setup, eps):
     dense = m(x, dt).predictions.detach()
     dev = torch.linalg.vector_norm(ref.predictions - dense, dim=-1)
     assert (dev <= ref.bounds + 1e-4).all() and (ref.bounds <= eps + 1e-6).all()
+
+
+@pytest.mark.parametrize("policy,eps", [("certified_pm", 0.5), ("certified_pm", 5.0), ("cdelta_pm", 0.0), ("cdelta_pm", 0.5)])
+def test_per_mode_compiled_matches_model(setup, policy, eps):
+    from physics_ml.engine_nb import CompiledEngine
+
+    m, eng, x, dt = setup
+    ref = m(x, dt, mode="masked_ref", policy=policy, epsilon=eps)
+    y, b, w = CompiledEngine(m).run(x[0].numpy(), dt[0].numpy(), policy=policy, epsilon=eps)
+    assert np.allclose(y, ref.predictions[0].numpy(), atol=1e-4)
+    assert np.array_equal(w, ref.selected_writes[0].numpy())
+    assert np.allclose(b, ref.bounds[0].numpy(), rtol=1e-4, atol=1e-6)

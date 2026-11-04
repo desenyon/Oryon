@@ -89,3 +89,18 @@ class BudgetLedger:
             omitted = omitted & ~force_compute
         self.e = update_error(self.e, rho, beta, omitted)
         return omitted
+
+
+def choose_omissions_modes(e: Tensor, amag: Tensor, beta: Tensor, c_spec: Tensor, c_mode: Tensor,
+                           epsilon: Tensor, costs: Tensor | None = None) -> Tensor:
+    """Per-mode ledger policy (H001b). Group bounds are separable, so the cost of omitting group i
+    is the exact increase of its group bound B_i; the same greedy prefix and final check apply.
+    e, amag, beta: [B, G, m]; returns bool [B, G]."""
+    from .bounds import group_bounds_modes
+
+    decayed = amag * e
+    base_i = group_bounds_modes(decayed, c_spec, c_mode)
+    new_i = group_bounds_modes(decayed + beta, c_spec, c_mode)
+    delta_i = (new_i - base_i).clamp_min(0.0)
+    ones = torch.ones_like(base_i)
+    return choose_omissions(base_i, ones, delta_i, torch.ones(base_i.shape[-1], dtype=base_i.dtype), epsilon, costs)

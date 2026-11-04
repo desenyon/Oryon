@@ -25,7 +25,8 @@ from pathlib import Path  # noqa: E402
 import numpy as np  # noqa: E402
 import torch  # noqa: E402
 
-from .benchmark import ratio_ci, time_methods  # noqa: E402
+from .benchmark import paired_speedup, ratio_ci, time_methods, time_paired  # noqa: E402
+from .model import CERTIFIED  # noqa: E402
 from .data import make  # noqa: E402
 from .engine_nb import CompiledEngine  # noqa: E402
 from .records import ROOT, Run, load_config  # noqa: E402
@@ -99,7 +100,7 @@ def main() -> None:
     for pol in cfg["policies"]:
         name, grid = pol["name"], pol["grid"]
         for val in grid:
-            kw = {"epsilon": val * unit} if name in ("certified", "cdelta", "oracle") else {"tau": val * (unit if name == "threshold" else 1.0)}
+            kw = {"epsilon": val * unit} if name in CERTIFIED else {"tau": val * (unit if name == "threshold" else 1.0)}
             r = model(x, dt, mode="masked_ref", policy=name, **kw)
             dev = torch.linalg.vector_norm(r.predictions - dense, dim=-1)  # [B, T]
             m = task_metric(task, r.predictions, y, mask, y_scale)
@@ -143,14 +144,21 @@ def main() -> None:
         for name, op in ops.items():
             if op is None or name == "oracle":
                 continue
-            kw = {"epsilon": op["param"] * unit} if name in ("certified", "cdelta") else {"tau": op["param"] * (unit if name == "threshold" else 1.0)}
+            kw = {"epsilon": op["param"] * unit} if name in CERTIFIED else {"tau": op["param"] * (unit if name == "threshold" else 1.0)}
             methods[name] = {"policy": name, **kw}
-        tm = time_methods(eng, xs, dts, methods, cfg["timing_reps"], rng)
         T = va.x.shape[1]
-        for k, v in tm.items():
-            timing[k] = {"median_us_per_step": float(np.median(v) / T * 1e6)}
-            if k != "dense_fused":
-                timing[k]["speedup_vs_dense_fused"] = ratio_ci(tm["dense_fused"], v, rng)
+        if cfg.get("timing_protocol", "A1") == "A2":
+            tm = time_paired(eng, xs, dts, methods, cfg["timing_reps"], rng)
+            for k, v in tm.items():
+                timing[k] = {"median_us_per_step": float(np.median(v) / T * 1e6), "protocol": "A2 paired"}
+                if k != "dense_fused":
+                    timing[k]["speedup_vs_dense_fused"] = paired_speedup(tm["dense_fused"], v, rng)
+        else:
+            tm = time_methods(eng, xs, dts, methods, cfg["timing_reps"], rng)
+            for k, v in tm.items():
+                timing[k] = {"median_us_per_step": float(np.median(v) / T * 1e6)}
+                if k != "dense_fused":
+                    timing[k]["speedup_vs_dense_fused"] = ratio_ci(tm["dense_fused"], v, rng)
         # engine/masked-ref agreement on the timed sequences (writes per step must match)
         for name in methods:
             if name == "dense_fused":

@@ -1,0 +1,54 @@
+{
+  "run_id": "p4-resonator-zerofreq-s1-20261104T181744",
+  "hypothesis": "H001",
+  "plan_rev": "R4",
+  "purpose": "dense pilot training: resonator / zerofreq",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=zerofreq seed=1",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T18:17:44Z",
+  "status": "running",
+  "git_commit": "2048b31a2331cb105a5cfe3d232f0e8ec69f4e43",
+  "git_dirty": true,
+  "source_patch_sha256": "24f5ddc3f05487be03dc4b2359467c96d0b1e8eaa1c51b0631b6e4e5ec9d9df5",
+  "untracked_src_sha256": {},
+  "config": {
+    "task": "resonator",
+    "model": "zerofreq",
+    "seed": 1,
+    "n_train": 4000,
+    "n_val": 500,
+    "steps": 1500,
+    "batch_size": 32,
+    "lr": 0.003,
+    "weight_decay": 0.0,
+    "clip": 1.0,
+    "eval_every": 250,
+    "max_minutes": 25,
+    "threads": 4,
+    "model_cfg": {
+      "groups": 8,
+      "modes": 32,
+      "d_model": 256,
+      "d_hidden": 64,
+      "omega_max": 3.0,
+      "gamma_init": [
+        0.005,
+        0.5
+      ]
+    },
+    "gru_hidden": 225
+  },
+  "config_sha256": "4c538ea679b09987a6d43b98413c4da2f1bdf56616b96bda86c9afc58ea0f283",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 82174
+}

@@ -6,7 +6,7 @@
   "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=osc seed=1",
   "cwd": "/Users/desenyon/Developer/Oryon",
   "start_utc": "2026-11-04T18:08:58Z",
-  "status": "running",
+  "status": "passed",
   "git_commit": "5a9a451031d6d2349fa8eb01988447a7bb6347a5",
   "git_dirty": false,
   "source_patch_sha256": null,
@@ -50,5 +50,15 @@
     "device": "cpu",
     "mps_available": true
   },
-  "pid": 81327
+  "pid": 81327,
+  "end_utc": "2026-11-04T18:17:39Z",
+  "wall_s": 520.45,
+  "device_hours": 0.1446,
+  "artifacts_sha256": {
+    "best.pt": "38c28a6d910805548ad292ad7d9b3d18378f0f421a5acc509e27feaee941bbcf",
+    "last.pt": "e03b0fcf0afa95d4479239fa4211893f477f6be498eed120a378c946f067f24f",
+    "log.txt": "2fd90f12de29f8ac6bb4ffff6cde4534a7b05514349ac3c225f18fddc6c02c93",
+    "metrics.json": "18b33bfb88ffb00939797c8a62c11bdf8dff23e15c69c319fd8c0cba975357df"
+  },
+  "key_result": "resonator/osc/s1: best val nrmse 0.0060 @ 1500; params 152779"
 }

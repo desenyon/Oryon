@@ -1,0 +1,56 @@
+diff --git a/experiments/index.csv b/experiments/index.csv
+index dcf4945..9fa03a3 100644
+--- a/experiments/index.csv
++++ b/experiments/index.csv
+@@ -25,3 +25,4 @@ p5-eval-resonator-osc-noise0.01-20261104T180624,H001,R3,policy sweep on validati
+ p5-eval-resonator-osc-noise0.05-20261104T180640,H001,R3,policy sweep on validation for runs/p4-resonator-osc-s0-20261104T172656,python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval.yaml --set model_run=runs/p4-resonator-osc-s0-20261104T172656 input_noise=0.05,passed,2026-11-04T18:06:40Z,2026-11-04T18:06:54Z,13.53,cpu,0.0038,runs/p5-eval-resonator-osc-noise0.05-20261104T180640,"resonator/osc: dense {'nrmse': 0.27866634726524353}; op write_frac certified=0.998, cdelta=0.987, oracle=0.957, threshold=1.000, delta=0.091; speedups {'certified': 0.8922477856875197, 'cdelta': 0.7681168429500173, 'threshold': 0.8926351683657783, 'delta': 1.497615390915644}"
+ p5-eval-recall-zerofreq-noise0.05-20261104T180656,H001,R3,policy sweep on validation for runs/p4-recall-zerofreq-s0-20261104T175412,python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval.yaml --set model_run=runs/p4-recall-zerofreq-s0-20261104T175412 input_noise=0.05,passed,2026-11-04T18:06:56Z,2026-11-04T18:07:10Z,13.88,cpu,0.0039,runs/p5-eval-recall-zerofreq-noise0.05-20261104T180656,"recall/zerofreq: dense {'acc': 0.13500000536441803}; op write_frac certified=0.988, cdelta=0.988, oracle=0.977, threshold=0.985, delta=0.998; speedups {'certified': 0.9087278396885733, 'cdelta': 0.8106051541861189, 'threshold': 0.9098234100542354, 'delta': 0.8837527960410451}"
+ p5-eval-recall-osc-20261104T180712,H001,R3,policy sweep on validation for runs/p4-recall-osc-s0-20261104T174529,python /Users/desenyon/Developer/Oryon/src/physics_ml/evaluate.py --config configs/policy_eval.yaml --set model_run=runs/p4-recall-osc-s0-20261104T174529 time_ops=false,passed,2026-11-04T18:07:12Z,2026-11-04T18:07:23Z,11.53,cpu,0.0032,runs/p5-eval-recall-osc-20261104T180712,"recall/osc: dense {'acc': 0.07500000298023224}; op write_frac certified=0.987, cdelta=0.009, oracle=0.965, threshold=0.987, delta=0.036; speedups {}"
++p4-resonator-osc-s1-20261104T180858,H001,R3,dense pilot training: resonator / osc,python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=osc seed=1,passed,2026-11-04T18:08:58Z,2026-11-04T18:17:39Z,520.45,cpu,0.1446,runs/p4-resonator-osc-s1-20261104T180858,resonator/osc/s1: best val nrmse 0.0060 @ 1500; params 152779
+diff --git a/runs/p4-resonator-osc-s1-20261104T180858/best.pt b/runs/p4-resonator-osc-s1-20261104T180858/best.pt
+index 4d3d546..af7086e 100644
+Binary files a/runs/p4-resonator-osc-s1-20261104T180858/best.pt and b/runs/p4-resonator-osc-s1-20261104T180858/best.pt differ
+diff --git a/runs/p4-resonator-osc-s1-20261104T180858/last.pt b/runs/p4-resonator-osc-s1-20261104T180858/last.pt
+index ccee5b3..ad0b24a 100644
+Binary files a/runs/p4-resonator-osc-s1-20261104T180858/last.pt and b/runs/p4-resonator-osc-s1-20261104T180858/last.pt differ
+diff --git a/runs/p4-resonator-osc-s1-20261104T180858/log.txt b/runs/p4-resonator-osc-s1-20261104T180858/log.txt
+index 015dac7..e30cfdd 100644
+--- a/runs/p4-resonator-osc-s1-20261104T180858/log.txt
++++ b/runs/p4-resonator-osc-s1-20261104T180858/log.txt
+@@ -4,3 +4,5 @@
+ [2026-11-04T18:12:54Z] step 750 loss 0.0001 val {'nrmse': 0.007475902926916109} best {'nrmse': 0.007475902926916109, 'step': 750}
+ [2026-11-04T18:14:25Z] step 1000 loss 0.0000 val {'nrmse': 0.006527292325280928} best {'nrmse': 0.006527292325280928, 'step': 1000}
+ [2026-11-04T18:16:00Z] step 1250 loss 0.0000 val {'nrmse': 0.00605464059193571} best {'nrmse': 0.00605464059193571, 'step': 1250}
++[2026-11-04T18:17:35Z] step 1500 loss 0.0000 val {'nrmse': 0.005969652461303579} best {'nrmse': 0.005969652461303579, 'step': 1500}
++[2026-11-04T18:17:39Z] resonator/osc/s1: best val nrmse 0.0060 @ 1500; params 152779
+diff --git a/runs/p4-resonator-osc-s1-20261104T180858/manifest.json b/runs/p4-resonator-osc-s1-20261104T180858/manifest.json
+index 91b5717..0ca492d 100644
+--- a/runs/p4-resonator-osc-s1-20261104T180858/manifest.json
++++ b/runs/p4-resonator-osc-s1-20261104T180858/manifest.json
+@@ -6,7 +6,7 @@
+   "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/train.py --config configs/pilot.yaml --set task=resonator model=osc seed=1",
+   "cwd": "/Users/desenyon/Developer/Oryon",
+   "start_utc": "2026-11-04T18:08:58Z",
+-  "status": "running",
++  "status": "passed",
+   "git_commit": "5a9a451031d6d2349fa8eb01988447a7bb6347a5",
+   "git_dirty": false,
+   "source_patch_sha256": null,
+@@ -50,5 +50,15 @@
+     "device": "cpu",
+     "mps_available": true
+   },
+-  "pid": 81327
++  "pid": 81327,
++  "end_utc": "2026-11-04T18:17:39Z",
++  "wall_s": 520.45,
++  "device_hours": 0.1446,
++  "artifacts_sha256": {
++    "best.pt": "38c28a6d910805548ad292ad7d9b3d18378f0f421a5acc509e27feaee941bbcf",
++    "last.pt": "e03b0fcf0afa95d4479239fa4211893f477f6be498eed120a378c946f067f24f",
++    "log.txt": "2fd90f12de29f8ac6bb4ffff6cde4534a7b05514349ac3c225f18fddc6c02c93",
++    "metrics.json": "18b33bfb88ffb00939797c8a62c11bdf8dff23e15c69c319fd8c0cba975357df"
++  },
++  "key_result": "resonator/osc/s1: best val nrmse 0.0060 @ 1500; params 152779"
+ }
+\ No newline at end of file

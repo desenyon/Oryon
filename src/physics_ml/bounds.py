@@ -98,7 +98,53 @@ class BoundCache:
         self.fingerprint = weight_fingerprint(W, C)
         self.wbar = frobenius_bounds(W)
         self.c = frobenius_bounds(C)
+        m = W.shape[1] // 2
+        self.wmode = mode_write_norms(W, m).to(W.dtype)  # [G, m]
+        cs, cm = readout_norms(C, m)
+        self.c_spec, self.c_mode = cs.to(C.dtype), cm.to(C.dtype)
 
     def check(self, W: Tensor, C: Tensor) -> None:
         if weight_fingerprint(W, C) != self.fingerprint:
             raise RuntimeError("weights changed since bounds were cached; recompute BoundCache")
+
+
+# ---------------------------------------------------------------- per-mode ledger (H001b, SPEC §3c)
+_MARGIN = 1e-9  # relative safety margin on float64-computed spectral norms (not a machine certificate)
+
+
+def mode_write_norms(W: Tensor, m: int) -> Tensor:
+    """Spectral norms of each mode's 2 x d real write block, closed form (2x2 Gram), float64.
+
+    W: [G, 2m, d] (rows interleaved re, im) -> [G, m]."""
+    _check_finite("W", W)
+    Wd = W.detach().double().view(W.shape[0], m, 2, W.shape[-1])
+    a = (Wd[:, :, 0] ** 2).sum(-1)
+    b = (Wd[:, :, 0] * Wd[:, :, 1]).sum(-1)
+    c = (Wd[:, :, 1] ** 2).sum(-1)
+    lam = 0.5 * (a + c) + torch.sqrt(0.25 * (a - c) ** 2 + b ** 2)
+    return torch.sqrt(lam) * (1 + _MARGIN)
+
+
+def readout_norms(C: Tensor, m: int) -> tuple[Tensor, Tensor]:
+    """Per-group spectral norm of C_i (float64 SVD + margin) and per-mode spectral norms of the
+    p x 2 blocks. C: [G, p, 2m] -> ([G], [G, m])."""
+    _check_finite("C", C)
+    Cd = C.detach().double()
+    c_spec = torch.linalg.matrix_norm(Cd, ord=2) * (1 + _MARGIN)
+    blocks = Cd.view(C.shape[0], C.shape[1], m, 2).permute(0, 2, 1, 3)  # [G, m, p, 2]
+    c_mode = torch.linalg.matrix_norm(blocks, ord=2) * (1 + _MARGIN)
+    return c_spec, c_mode
+
+
+def group_bounds_modes(e: Tensor, c_spec: Tensor, c_mode: Tensor) -> Tensor:
+    """B_i = min(||C_i||_2 ||e_i||_2, sum_j ||C_ij||_2 e_ij), e: [B, G, m] -> [B, G]."""
+    return torch.minimum(c_spec * torch.linalg.vector_norm(e, dim=-1), (c_mode * e).sum(-1))
+
+
+def update_error_modes(e: Tensor, amag: Tensor, beta: Tensor, omitted: Tensor) -> Tensor:
+    """e_ij <- |a_ij| e_ij + (1 - m_i) beta_ij. e, amag, beta: [B, G, m]; omitted: [B, G]."""
+    _check_nonneg("e", e)
+    _check_nonneg("beta", beta)
+    if (amag > 1).any() or (amag < 0).any():
+        raise ValueError("|a| must lie in [0, 1]")
+    return amag * e + omitted[..., None].to(beta.dtype) * beta

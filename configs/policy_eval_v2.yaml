@@ -1,0 +1,24 @@
+# P5 protocol amendment A2 (D015, after independent review docs/review_results_1.md).
+# Changes vs policy_eval.yaml (whose results are preserved): wider tolerance grids (the v1 recall
+# certified operating points sat on the grid edge), exact memoization (delta tau=0), H001b
+# per-mode ledger policies, paired timing over 40 distinct sequences. Quality tolerances unchanged.
+hypothesis: H001/H001b
+model_run: runs/REPLACE_ME
+n_val: 200
+seed: 11
+threads: 4
+tol_rel_rmse: 0.02
+tol_acc_pp: 0.5
+policies:
+  - {name: certified,    grid: [0.0, 0.01, 0.03, 0.1, 0.3, 1.0, 3.0, 10.0, 30.0, 100.0, 300.0, 1000.0, 3000.0]}
+  - {name: certified_pm, grid: [0.0, 0.01, 0.03, 0.1, 0.3, 1.0, 3.0, 10.0, 30.0, 100.0, 300.0, 1000.0, 3000.0]}
+  - {name: cdelta,       grid: [0.0, 0.01, 0.03, 0.1, 0.3, 1.0, 3.0, 10.0, 30.0, 100.0, 300.0, 1000.0]}
+  - {name: cdelta_pm,    grid: [0.0, 0.01, 0.03, 0.1, 0.3, 1.0, 3.0, 10.0, 30.0, 100.0, 300.0, 1000.0]}
+  - {name: oracle,       grid: [0.01, 0.1, 1.0, 10.0, 100.0, 1000.0]}
+  - {name: threshold,    grid: [0.003, 0.01, 0.03, 0.1, 0.3, 1.0, 3.0, 10.0, 30.0]}
+  - {name: delta,        grid: [0.0, 0.01, 0.03, 0.1, 0.3, 1.0, 3.0]}
+input_noise: 0.0
+time_ops: true
+timing_protocol: A2
+n_time_seqs: 40
+timing_reps: 5

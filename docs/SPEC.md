@@ -1,6 +1,6 @@
 # SPEC — H001 certified selective-write oscillator SSM
 
-Revision: S2 (2026-11-04; S1 = bootstrap from CODEX_RESEARCH_PLAN.md v1.0 §3; S2 adds §5b and B1).
+Revision: S3 (2026-11-04; S1 = bootstrap from CODEX_RESEARCH_PLAN.md v1.0 §3; S2 adds §5b and B1; S3 adds §3c H001b).
 Changes to this file are logged in docs/DECISIONS.md.
 
 ## 1. Model (dense reference)
@@ -80,6 +80,18 @@ tested separately, see C8).
 
 Non-claims (each would need a new derivation): hidden-state-dependent gates/transitions,
 autoregressive feedback, deep recurrent stacks, changing or unbounded readout, nonlinear readout.
+
+## 3c. H001b per-mode ledger (D015)
+
+Same omission decisions per group, tighter certificate. Mode j of group i: d_ij,t = a_ij d_ij,t-1
++ (1-m_i) b_ij with |b_ij| <= |g_i| ||W_ij||_2 ||u_t|| =: beta_ij (W_ij = 2 x d real block;
+spectral norm in closed form from its 2x2 Gram matrix). Ledger e_ij,t = |a_ij| e_ij,t-1 +
+(1-m_i) beta_ij gives |d_ij| <= e_ij (same induction as T1, per complex coordinate). Then
+||d_i||_2 <= ||e_i||_2, and ||C_i d_i|| <= B_i := min(||C_i||_2 ||e_i||_2, sum_j ||C_ij||_2 e_ij).
+Output bound B = sum_i B_i; groups are separable, so the policy charges each omission its exact
+increase of B_i and keeps L1 (computing all writes keeps B <= eps). Spectral norms are computed in
+float64 with a 1e-9 relative margin: sound up to LAPACK/closed-form accuracy, not a machine
+certificate. Certified delta analogue: replace ||u_t|| by ||u_t - u^_i||.
 
 ## 4. Budget policy P1 (causal, fixed epsilon per sequence)
 
