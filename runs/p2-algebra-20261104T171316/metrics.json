@@ -1,0 +1,70 @@
+{
+  "policy": {
+    "state_checks": 2048000,
+    "out_checks": 256000,
+    "state_max_excess": 0.0,
+    "out_max_excess": 0.0,
+    "state_pos_excess_count": 0,
+    "out_pos_excess_count": 0,
+    "state_viol": 0,
+    "out_viol": 0,
+    "budget_checks": 256000,
+    "budget_max_excess": 0.0,
+    "budget_viol": 0,
+    "budget_pos_excess_count": 0,
+    "f32_state_checks": 206848,
+    "f32_state_max_excess": 0.0006751900248382614,
+    "f32_state_pos_excess_count": 49998,
+    "f32_state_max_excess_rel": 1.6583431769773933e-05,
+    "omit_frac": {
+      "mean": 0.50615478515625,
+      "median": 0.568115234375,
+      "min": 0.0,
+      "max": 0.9794921875
+    },
+    "frob_over_spec_w_mean": {
+      "mean": 1.8029936990536002,
+      "median": 1.838038583414928,
+      "min": 1.3102931812484546,
+      "max": 2.312686741448964
+    },
+    "tightness_out_median": {
+      "mean": 0.028687779873676687,
+      "median": 0.020441133256523754,
+      "min": 0.001997181110285842,
+      "max": 0.18146307675308723
+    }
+  },
+  "random_mask": {
+    "state_checks": 2048000,
+    "out_checks": 256000,
+    "state_max_excess": 0.0,
+    "out_max_excess": 0.0,
+    "state_pos_excess_count": 0,
+    "out_pos_excess_count": 0,
+    "state_viol": 0,
+    "out_viol": 0,
+    "f32_state_checks": 196608,
+    "f32_state_max_excess": 2.1352988374845138e-05,
+    "f32_state_pos_excess_count": 8585,
+    "f32_state_max_excess_rel": 1.4397758690462537e-06,
+    "omit_frac": {
+      "mean": 0.5043974609375,
+      "median": 0.509765625,
+      "min": 0.00048828125,
+      "max": 0.9990234375
+    },
+    "tightness_out_median": {
+      "mean": 0.012699158346705281,
+      "median": 0.008512960289481097,
+      "min": 0.0012761963811472334,
+      "max": 0.1490491615148758
+    },
+    "frob_over_spec_w_mean": {
+      "mean": 1.828776500191401,
+      "median": 1.8466602025687868,
+      "min": 1.3103815683328972,
+      "max": 2.289998617488183
+    }
+  }
+}

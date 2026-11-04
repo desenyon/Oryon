@@ -1,0 +1,59 @@
+{
+  "run_id": "p2-algebra-20261104T171316",
+  "hypothesis": "H001",
+  "plan_rev": "R1",
+  "purpose": "independent new float64 check of T1/L1 bounds (not a reproduction)",
+  "command": "python /Users/desenyon/Developer/Oryon/src/physics_ml/reproduce.py --config configs/algebra.yaml",
+  "cwd": "/Users/desenyon/Developer/Oryon",
+  "start_utc": "2026-11-04T17:13:16Z",
+  "status": "passed",
+  "git_commit": "d7c3a0866c8597e06eb870cc37c9f55b382b35b8",
+  "git_dirty": false,
+  "source_patch_sha256": null,
+  "untracked_src_sha256": {},
+  "config": {
+    "seed": 20261104,
+    "n_systems": 1000,
+    "steps": 256,
+    "groups": 8,
+    "modes": 4,
+    "outputs": 3,
+    "input_dims": [
+      4,
+      16,
+      64
+    ],
+    "undamped_frac": 0.25,
+    "eps_frac_min": 0.01,
+    "eps_frac_max": 300.0,
+    "eps_zero_prob": 0.05,
+    "tol": 1e-10,
+    "float32_every": 10,
+    "modes_run": [
+      "policy",
+      "random_mask"
+    ]
+  },
+  "config_sha256": "6cbedc70fc9eef0a7c7774ba0c9f896f29dc9f9ce13b01e42be83662213a9f5f",
+  "env": {
+    "python": "3.12.15",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "torch_threads": 4,
+    "device": "cpu",
+    "mps_available": true
+  },
+  "pid": 78062,
+  "end_utc": "2026-11-04T17:13:52Z",
+  "wall_s": 36.09,
+  "device_hours": 0.01,
+  "artifacts_sha256": {
+    "log.txt": "714f704b9aa0826a0e0f77ebe9ed0c6abc06c62614762de9c58f8ec644a21c40",
+    "metrics.json": "608b440e5fd3d0cfb896cb5b71a417c750a1906eeabdb174df0454b23591212b",
+    "violations.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "key_result": "passed: policy mode state/out/budget checks 2048000/256000/256000, violations@tol 0; max raw excess float64 state 0.000e+00 out 0.000e+00 budget 0.000e+00; float32 state max excess 6.752e-04"
+}

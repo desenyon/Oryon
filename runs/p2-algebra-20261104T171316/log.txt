@@ -1,0 +1,21 @@
+[2026-11-04T17:13:18Z] policy: 100/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:20Z] policy: 200/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:23Z] policy: 300/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:25Z] policy: 400/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:27Z] policy: 500/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:30Z] policy: 600/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:32Z] policy: 700/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:34Z] policy: 800/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:37Z] policy: 900/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:39Z] policy: 1000/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:40Z] random_mask: 100/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:42Z] random_mask: 200/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:43Z] random_mask: 300/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:44Z] random_mask: 400/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:45Z] random_mask: 500/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:47Z] random_mask: 600/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:48Z] random_mask: 700/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:49Z] random_mask: 800/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:50Z] random_mask: 900/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:52Z] random_mask: 1000/1000 systems; viol so far state=0 out=0 budget=0
+[2026-11-04T17:13:52Z] passed: policy mode state/out/budget checks 2048000/256000/256000, violations@tol 0; max raw excess float64 state 0.000e+00 out 0.000e+00 budget 0.000e+00; float32 state max excess 6.752e-04
